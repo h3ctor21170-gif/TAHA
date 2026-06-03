@@ -1,0 +1,6 @@
+{
+  "name": "BlueCom Batna",
+  "description": "Système de gestion pour atelier de réparation de téléphones mobiles - BlueCom Batna. Suivi des tickets, statistiques de marge et facturation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

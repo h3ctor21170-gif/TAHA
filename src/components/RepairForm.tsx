@@ -1,0 +1,463 @@
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { useState, useEffect, FormEvent } from 'react';
+import { Save, X, Info, HelpCircle, AlertTriangle, Cpu, DollarSign, User } from 'lucide-react';
+import { RepairTicket, TicketStatus } from '../types';
+
+interface RepairFormProps {
+  isDarkMode: boolean;
+  editingTicket: RepairTicket | null;
+  onSave: (ticket: RepairTicket) => void;
+  onCancel: () => void;
+  lastGeneratedId: string;
+}
+
+export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel, lastGeneratedId }: RepairFormProps) {
+  // Input fields state hooks
+  const [nomClient, setNomClient] = useState('');
+  const [telephoneClient, setTelephoneClient] = useState('');
+  const [modele, setModele] = useState('');
+  const [piecePrix, setPiecePrix] = useState<number>(0);
+  const [descriptionProbleme, setDescriptionProbleme] = useState('');
+  const [dateEntree, setDateEntree] = useState('');
+  const [dateFin, setDateFin] = useState('');
+  const [statut, setStatut] = useState<TicketStatus>('En attente de diagnostic');
+  const [prixFacture, setPrixFacture] = useState<number>(0);
+  const [notes, setNotes] = useState('');
+  const [datePriseEnCharge, setDatePriseEnCharge] = useState('');
+
+  // Validation state
+  const [errors, setErrors] = useState<{ nomClient?: string }>({});
+
+  // Trigger loading state if we are editing an existing item vs creating a new one
+  useEffect(() => {
+    if (editingTicket) {
+      setNomClient(editingTicket.nomClient || '');
+      setTelephoneClient(editingTicket.telephoneClient || '');
+      setModele(editingTicket.modele || '');
+      setPiecePrix(editingTicket.piecePrix || 0);
+      setDescriptionProbleme(editingTicket.descriptionProbleme || '');
+      setDateEntree(editingTicket.dateEntree || '');
+      setDateFin(editingTicket.dateFin || '');
+      setStatut(editingTicket.statut || 'En attente de diagnostic');
+      setPrixFacture(editingTicket.prixFacture || 0);
+      setNotes(editingTicket.notes || '');
+      setDatePriseEnCharge(editingTicket.datePriseEnCharge || '');
+      setErrors({});
+    } else {
+      // Create Mode: Set default current local ISO datetime string
+      const now = new Date();
+      // format to YYYY-MM-DDTHH:MM local time
+      const offset = now.getTimezoneOffset();
+      const localNow = new Date(now.getTime() - (offset * 60 * 1000));
+      const defaultDateTime = localNow.toISOString().slice(0, 16);
+
+      setNomClient('');
+      setTelephoneClient('');
+      setModele('');
+      setPiecePrix(0);
+      setDescriptionProbleme('');
+      setDateEntree(defaultDateTime);
+      setDateFin('');
+      setStatut('En attente de diagnostic');
+      setPrixFacture(0);
+      setNotes('');
+      setDatePriseEnCharge(defaultDateTime); // Prise en charge default
+      setErrors({});
+    }
+  }, [editingTicket]);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    // Primary validations
+    if (!nomClient.trim()) {
+      setErrors({ nomClient: "Le nom du client est requis pour l'enregistrement." });
+      // Scroll to top or validation alert
+      return;
+    }
+
+    // Prepare ticket representation
+    const ticketToSave: RepairTicket = {
+      id: editingTicket ? editingTicket.id : generateNextId(lastGeneratedId),
+      dateEntree,
+      nomClient: nomClient.trim(),
+      telephoneClient: telephoneClient.trim(),
+      modele: modele.trim(),
+      piecePrix: Number(piecePrix) || 0,
+      descriptionProbleme: descriptionProbleme.trim(),
+      prixFacture: Number(prixFacture) || 0,
+      notes: notes.trim(),
+      datePriseEnCharge,
+      dateFin,
+      statut,
+    };
+
+    onSave(ticketToSave);
+  };
+
+  // Safe manual sequential generation helper incase last ID isn't formatted right
+  const generateNextId = (lastId: string): string => {
+    if (!lastId) return "BC-1007";
+    try {
+      const numericPart = parseInt(lastId.replace(/[^\d]/g, ''), 10);
+      if (isNaN(numericPart)) {
+        return "BC-1007";
+      }
+      return `BC-${numericPart + 1}`;
+    } catch {
+      return "BC-1007";
+    }
+  };
+
+  // Instant calculated margin badge
+  const liveMargin = (Number(prixFacture) || 0) - (Number(piecePrix) || 0);
+  const liveMarginPercent = Number(prixFacture) > 0 ? Math.round((liveMargin / Number(prixFacture)) * 100) : 0;
+
+  return (
+    <form onSubmit={handleSubmit} className="p-8 space-y-6" id="repair-entry-form">
+      {/* Title + Action Buttons Line */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-dashed border-slate-200 dark:border-slate-800 pb-5" id="form-header-row">
+        <div>
+          <h3 className={`text-xl font-extrabold tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-850'}`} id="form-screen-title">
+            {editingTicket ? `Modifier le Ticket ${editingTicket.id}` : `Créer un Nouveau Ticket`}
+          </h3>
+          <p className="text-xs text-slate-400 mt-0.5" id="form-screen-subtitle">
+            {editingTicket 
+              ? "Modification des renseignements de maintenance et mise à jour financière"
+              : `Génération du ticket d'entrée ID : ${generateNextId(lastGeneratedId)}`
+            }
+          </p>
+        </div>
+
+        {/* Gray Annuler & Blue Enregistrer buttons inside form header */}
+        <div className="flex items-center space-x-2.5" id="form-head-actions">
+          <button
+            id="btn-form-cancel"
+            type="button"
+            onClick={onCancel}
+            className={`flex items-center space-x-1 font-bold text-xs px-4 py-2.5 rounded-lg border transition-all cursor-pointer ${
+              isDarkMode 
+                ? 'bg-[#1e293b] border-[#334155] hover:bg-slate-700 text-slate-300' 
+                : 'bg-slate-100 border-slate-200 hover:bg-slate-200 text-slate-650'
+            }`}
+          >
+            <X className="w-4 h-4" />
+            <span>Annuler</span>
+          </button>
+          
+          <button
+            id="btn-form-save"
+            type="submit"
+            className="flex items-center space-x-1.5 bg-[#0284c7] hover:bg-[#0284c7]/95 active:bg-[#0284c7]/90 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow cursor-pointer transition-all"
+          >
+            <Save className="w-4 h-4" />
+            <span>Enregistrer</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Dual Column Content Fields */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" id="form-dual-columns">
+        
+        {/* LEFT COLUMN */}
+        <div 
+          id="col-form-left"
+          className={`p-6 rounded-2xl border space-y-4 shadow-sm transition-all ${
+            isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-slate-200'
+          }`}
+        >
+          <div className="border-b dark:border-slate-800 pb-2 mb-2 flex items-center space-x-2 text-blue-505" id="left-col-header">
+            <User className="w-4 h-4 text-blue-500" />
+            <span className="text-xs font-bold uppercase tracking-wider">Informations Client & Matériel</span>
+          </div>
+
+          {/* Nom du client */}
+          <div className="space-y-1" id="field-client-name">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1" htmlFor="inp-client-name">
+              <span>Nom du client</span>
+              <span className="text-red-550">*</span>
+            </label>
+            <input
+              id="inp-client-name"
+              type="text"
+              required
+              placeholder="Ex: Mohamed Kacimi"
+              value={nomClient}
+              onChange={(e) => {
+                setNomClient(e.target.value);
+                if (e.target.value.trim()) setErrors({});
+              }}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                errors.nomClient 
+                  ? 'border-red-500 bg-red-500/5 focus:ring-red-500' 
+                  : isDarkMode 
+                    ? 'bg-[#0f172a] border-[#334155] text-slate-205 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                    : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600 focus:border-blue-600'
+              }`}
+            />
+            {errors.nomClient && (
+              <p className="text-[10px] text-red-500 font-bold mt-1" id="err-client-name">{errors.nomClient}</p>
+            )}
+          </div>
+
+          {/* Modèle de téléphone */}
+          <div className="space-y-1" id="field-phone-model">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="inp-phone-model">
+              Modèle de téléphone
+            </label>
+            <input
+              id="inp-phone-model"
+              type="text"
+              placeholder="Ex: iPhone 13 Pro, Samsung A52"
+              value={modele}
+              onChange={(e) => setModele(e.target.value)}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                isDarkMode 
+                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+              }`}
+            />
+          </div>
+
+          {/* Prix de la pièce d'origine (DZD) */}
+          <div className="space-y-1" id="field-part-cost">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between" htmlFor="inp-part-cost">
+              <span>Prix de la pièce d'origine (DZD)</span>
+              <span className="text-[10px] text-amber-500 font-mono">Coût interne</span>
+            </label>
+            <div className="relative" id="part-cost-input-wrapper">
+              <input
+                id="inp-part-cost"
+                type="number"
+                min="0"
+                placeholder="0"
+                value={piecePrix === 0 ? '' : piecePrix}
+                onChange={(e) => setPiecePrix(Number(e.target.value))}
+                className={`w-full text-xs pl-3 pr-12 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all font-mono ${
+                  isDarkMode 
+                    ? 'bg-[#0f172a] border-[#334155] text-slate-250 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                    : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+                }`}
+              />
+              <span className="absolute right-3.5 top-2.5 text-xs text-slate-500 font-bold font-mono">DZD</span>
+            </div>
+          </div>
+
+          {/* Description du problème */}
+          <div className="space-y-1" id="field-problem-desc">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="txt-problem-desc">
+              Description du problème (Panne signalée)
+            </label>
+            <textarea
+              id="txt-problem-desc"
+              rows={4}
+              placeholder="Décrivez précisément le symptôme de la panne constaté par l'opérateur ou décrit par le client..."
+              value={descriptionProbleme}
+              onChange={(e) => setDescriptionProbleme(e.target.value)}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                isDarkMode 
+                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+              }`}
+            />
+          </div>
+
+          {/* Dates Sub-grid Left Side */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4" id="left-dates-grid">
+            {/* Date d'entrée */}
+            <div className="space-y-1" id="field-date-entry">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="dt-entry-picker">
+                Date d'entrée
+              </label>
+              <input
+                id="dt-entry-picker"
+                type="datetime-local"
+                value={dateEntree}
+                onChange={(e) => setDateEntree(e.target.value)}
+                className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                  isDarkMode 
+                    ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                    : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-500'
+                }`}
+              />
+            </div>
+
+            {/* Date de fin réparation */}
+            <div className="space-y-1" id="field-date-end">
+              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="dt-end-picker">
+                Date fin réparation
+              </label>
+              <input
+                id="dt-end-picker"
+                type="datetime-local"
+                value={dateFin}
+                onChange={(e) => setDateFin(e.target.value)}
+                className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                  isDarkMode 
+                    ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                    : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-500'
+                }`}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div 
+          id="col-form-right"
+          className={`p-6 rounded-2xl border space-y-4 shadow-sm transition-all ${
+            isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-slate-200'
+          }`}
+        >
+          <div className="border-b dark:border-slate-800 pb-2 mb-2 flex items-center space-x-2 text-emerald-505" id="right-col-header">
+            <DollarSign className="w-4 h-4 text-emerald-500" />
+            <span className="text-xs font-bold uppercase tracking-wider">Suivi Interne & Tarification</span>
+          </div>
+
+          {/* Téléphone du client */}
+          <div className="space-y-1" id="field-client-phone">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="inp-client-phone">
+              Téléphone du client
+            </label>
+            <input
+              id="inp-client-phone"
+              type="text"
+              placeholder="Ex: 0550123456"
+              value={telephoneClient}
+              onChange={(e) => setTelephoneClient(e.target.value)}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all font-mono ${
+                isDarkMode 
+                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+              }`}
+            />
+          </div>
+
+          {/* Statut Dropdown: En attente de diagnostic, En réparation, Réparation terminée */}
+          <div className="space-y-1" id="field-ticket-status">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="sel-ticket-status">
+              Statut du dossier
+            </label>
+            <select
+              id="sel-ticket-status"
+              value={statut}
+              onChange={(e) => setStatut(e.target.value as TicketStatus)}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                isDarkMode 
+                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+              }`}
+            >
+              <option value="En attente de diagnostic">En attente de diagnostic</option>
+              <option value="En réparation">En réparation</option>
+              <option value="Réparation terminée">Réparation terminée</option>
+            </select>
+          </div>
+
+          {/* Prix final facturé (DZD) */}
+          <div className="space-y-1" id="field-final-price">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between" htmlFor="inp-final-price">
+              <span>Prix final facturé (DZD)</span>
+              <span className="text-[10px] text-emerald-505 dark:text-emerald-400 font-bold font-mono">Montant client</span>
+            </label>
+            <div className="relative" id="final-price-wrapper">
+              <input
+                id="inp-final-price"
+                type="number"
+                min="0"
+                placeholder="0"
+                value={prixFacture === 0 ? '' : prixFacture}
+                onChange={(e) => setPrixFacture(Number(e.target.value))}
+                className={`w-full text-xs pl-3 pr-12 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all font-mono font-bold ${
+                  isDarkMode 
+                    ? 'bg-[#0f172a] border-[#334155] text-slate-250 focus:ring-[#38bdf8]' 
+                    : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-605'
+                }`}
+              />
+              <span className="absolute right-3.5 top-2.5 text-xs text-slate-500 font-bold font-mono">DZD</span>
+            </div>
+          </div>
+
+          {/* Notes supplémentaires */}
+          <div className="space-y-1" id="field-extra-notes">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="txt-extra-notes">
+              Notes supplémentaires (Historique d'intervention)
+            </label>
+            <textarea
+              id="txt-extra-notes"
+              rows={4}
+              placeholder="Indiquez ici les détails internes de la réparation, l'origine de la pièce, le travail effectué ou les remarques remises au client..."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                isDarkMode 
+                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+              }`}
+            />
+          </div>
+
+          {/* Date de prise en charge (Datetime picker) */}
+          <div className="space-y-1" id="field-date-takeover">
+            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="dt-takeover-picker">
+              Date de prise en charge diagnostic/réparations
+            </label>
+            <input
+              id="dt-takeover-picker"
+              type="datetime-local"
+              value={datePriseEnCharge}
+              onChange={(e) => setDatePriseEnCharge(e.target.value)}
+              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+                isDarkMode 
+                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8]' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-550'
+              }`}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Live Financial Margin Summary Card */}
+      <div 
+        id="financial-margin-preview-box"
+        className={`p-5 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
+          isDarkMode ? 'bg-[#1e293b] border-[#334155] text-slate-300' : 'bg-slate-55 border-slate-200 text-slate-700'
+        }`}
+      >
+        <div className="flex items-start space-x-3" id="margin-intro">
+          <Info className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+          <div>
+            <h5 className="text-xs font-bold">Aperçu financier instantané du ticket</h5>
+            <p className="text-[10px] text-slate-400 mt-0.5">La marge brute est calculée automatiquement à partir de la différence entre la facturation finale et le coût des rechanges d'origine.</p>
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-6 sm:space-x-8" id="margin-vals">
+          {/* Internal cost display */}
+          <div className="text-left" id="lbl-margin-cost">
+            <span className="text-[10px] uppercase font-bold text-slate-450 block">Coût interne</span>
+            <span className="text-xs font-mono font-bold">{new Intl.NumberFormat('fr-DZ', { style: 'currency', currency: 'DZD', maximumFractionDigits:0 }).format(piecePrix || 0)}</span>
+          </div>
+
+          {/* Revenue display */}
+          <div className="text-left" id="lbl-margin-revenue">
+            <span className="text-[10px] uppercase font-bold text-slate-450 block">Facturé</span>
+            <span className="text-xs font-mono font-bold text-emerald-505 dark:text-emerald-400">{new Intl.NumberFormat('fr-DZ', { style: 'currency', currency: 'DZD', maximumFractionDigits:0 }).format(prixFacture || 0)}</span>
+          </div>
+
+          {/* Marge Calculee inline row badge */}
+          <div className="text-left py-1 px-3 bg-blue-500/10 rounded-xl border border-blue-500/20" id="lbl-margin-profit-calc">
+            <span className="text-[9px] uppercase font-extrabold text-blue-500 block">Marge brute estimée</span>
+            <span className={`text-sm font-extrabold font-mono ${liveMargin >= 0 ? 'text-blue-500' : 'text-red-500'}`}>
+              {new Intl.NumberFormat('fr-DZ', { style: 'currency', currency: 'DZD', maximumFractionDigits:0 }).format(liveMargin || 0)} ({liveMarginPercent}%)
+            </span>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
