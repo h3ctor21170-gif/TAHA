@@ -18,7 +18,7 @@ export default function App() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
   
   // Navigation tabs state
-  const [activeTab, setActiveTab] = useState<'statistiques' | 'liste' | 'nouveau'>('statistiques');
+  const [activeTab, setActiveTab] = useState<'statistiques' | 'liste' | 'nouveau'>('nouveau');
   
   // Repair tickets master state
   const [tickets, setTickets] = useState<RepairTicket[]>([]);
@@ -147,7 +147,7 @@ export default function App() {
     try {
       setTickets(INITIAL_REPAIR_TICKETS);
       localStorage.setItem('bluecom_batna_tickets', JSON.stringify(INITIAL_REPAIR_TICKETS));
-      setActiveTab('statistiques');
+      setActiveTab('nouveau');
       setEditingTicket(null);
     } catch (e) {
       console.error(e);

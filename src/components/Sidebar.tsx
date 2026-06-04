@@ -31,16 +31,16 @@ export default function Sidebar({ activeTab, setActiveTab, resetAllTickets }: Si
         {/* Navigation Tabs */}
         <nav className="p-4 space-y-1.5" id="sidebar-nav">
           <button
-            id="nav-tab-statistiques"
-            onClick={() => setActiveTab('statistiques')}
+            id="nav-tab-nouveau"
+            onClick={() => setActiveTab('nouveau')}
             className={`w-full flex items-center space-x-3 px-4 py-3 text-sm font-semibold transition-all duration-200 border-l-4 ${
-              activeTab === 'statistiques'
+              activeTab === 'nouveau'
                 ? 'bg-[#1e293b] text-[#f8fafc] border-[#38bdf8]'
                 : 'text-[#94a3b8] border-transparent hover:bg-[#1e293b]/50 hover:text-[#f8fafc]'
             }`}
           >
-            <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
-            <span>Statistiques</span>
+            <PenTool className="w-5 h-5 flex-shrink-0" />
+            <span>Nouveau ticket</span>
           </button>
 
           <button
@@ -57,16 +57,16 @@ export default function Sidebar({ activeTab, setActiveTab, resetAllTickets }: Si
           </button>
 
           <button
-            id="nav-tab-nouveau"
-            onClick={() => setActiveTab('nouveau')}
+            id="nav-tab-statistiques"
+            onClick={() => setActiveTab('statistiques')}
             className={`w-full flex items-center space-x-3 px-4 py-3 text-sm font-semibold transition-all duration-200 border-l-4 ${
-              activeTab === 'nouveau'
+              activeTab === 'statistiques'
                 ? 'bg-[#1e293b] text-[#f8fafc] border-[#38bdf8]'
                 : 'text-[#94a3b8] border-transparent hover:bg-[#1e293b]/50 hover:text-[#f8fafc]'
             }`}
           >
-            <PenTool className="w-5 h-5 flex-shrink-0" />
-            <span>Nouveau ticket</span>
+            <LayoutDashboard className="w-5 h-5 flex-shrink-0" />
+            <span>Statistiques</span>
           </button>
         </nav>
       </div>
