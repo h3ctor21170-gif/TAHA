@@ -257,15 +257,15 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
       htmlContent = `
         <div class="etiquette-container">
           <div class="etiquette-header">
-            <span class="etiquette-brand">BlueCom</span>
-            <span class="etiquette-id">${editingTicket.id}</span>
+            TICKET N° ${editingTicket.id}
           </div>
-          <div class="etiquette-barcode">
-            ${barcodeHtml}
+          <div class="etiquette-model">
+            ${(editingTicket.modele || 'Modèle inconnu').toUpperCase()}
           </div>
-          <div class="etiquette-footer">
-            <span class="etiquette-model">${editingTicket.modele || 'Modèle'}</span>
-            <span class="etiquette-client">${editingTicket.nomClient}</span>
+          <div class="etiquette-details">
+            <div class="etiquette-line"><b>Client:</b> ${editingTicket.nomClient}</div>
+            <div class="etiquette-line"><b>Panne:</b> ${editingTicket.descriptionProbleme || 'Non spécifiée'}</div>
+            <div class="etiquette-line etiquette-price"><b>Prix:</b> ${formatDZD(editingTicket.prixFacture)}</div>
           </div>
         </div>
       `;
@@ -285,69 +285,61 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .etiquette-container {
           width: 40mm;
           height: 20mm;
-          padding: 1.2mm 2mm 0.8mm 2mm;
+          padding: 1.2mm 1.8mm;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
           background: white;
           color: black;
           box-sizing: border-box;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
         }
         .etiquette-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
-          padding-bottom: 0.2mm;
-        }
-        .etiquette-brand {
-          font-size: 7.5px;
-          font-weight: 900;
-          text-transform: uppercase;
-          font-family: monospace;
-          letter-spacing: -0.2px;
-        }
-        .etiquette-id {
-          font-size: 9.5px;
-          font-weight: 900;
-          font-family: monospace;
           background: black;
           color: white;
-          padding: 0.2mm 1mm;
+          font-size: 8px;
+          font-weight: 900;
+          text-align: center;
+          padding: 0.5px 0;
           border-radius: 1px;
-          line-height: 1;
-        }
-        .etiquette-barcode {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 6.5mm;
-          margin: 0.4mm 0;
-        }
-        .etiquette-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-top: 0.5px solid rgba(0, 0, 0, 0.3);
-          padding-top: 0.4mm;
-          font-size: 6.5px;
+          text-transform: uppercase;
           line-height: 1.1;
+          margin-bottom: 0.8mm;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .etiquette-model {
-          font-weight: 850;
+          font-size: 8px;
+          font-weight: 900;
           text-transform: uppercase;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 21mm;
+          line-height: 1.15;
+          margin-bottom: 0.6mm;
+          border-bottom: 0.5px solid rgba(0, 0, 0, 0.26);
+          padding-bottom: 0.3mm;
         }
-        .etiquette-client {
-          font-weight: 900;
+        .etiquette-details {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3px;
+        }
+        .etiquette-line {
+          font-size: 6.6px;
+          color: black;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 14mm;
-          text-align: right;
+          line-height: 1.1;
+        }
+        .etiquette-line b {
+          font-weight: 850;
+        }
+        .etiquette-price {
+          font-size: 7px;
+          font-weight: 900;
+          margin-top: 0.2mm;
         }
       `;
     } else {
