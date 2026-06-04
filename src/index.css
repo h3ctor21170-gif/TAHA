@@ -7,6 +7,11 @@
 }
 
 @media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   /* Hiding sidebar, header, form input fields, etc. */
   header,
   footer,

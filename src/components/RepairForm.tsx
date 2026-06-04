@@ -200,30 +200,569 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
     }
   };
 
-  // Standard printing trigger supporting size adjustments
+  // Standard printing trigger utilizing a hidden Iframe to avoid parent print stylesheet bugs and empty page outputs
   const handlePrint = (type: 'etiquette' | 'bon') => {
-    // 1. Create a dynamic style element in Head to inject physical dimension rules
-    const style = document.createElement('style');
-    style.id = 'print-page-size-style';
-    style.innerHTML = type === 'etiquette' 
-      ? '@page { size: 40mm 20mm; margin: 0; }' 
-      : '@page { size: 148mm 105mm; margin: 0; }';
-    document.head.appendChild(style);
+    if (!editingTicket) return;
 
-    // 2. Add control classes onto parent HTML body
-    document.body.classList.add(`print-${type}-active`);
-    document.body.classList.add('print-mode-active');
+    // 1. Build vector graphics in standard SVG text format
+    const barcodeHtml = `
+      <svg viewBox="0 0 100 15" width="100%" height="100%" style="display: block;">
+        <rect x="0" y="0" width="1.5" height="15" fill="black" />
+        <rect x="2" y="0" width="0.75" height="15" fill="black" />
+        <rect x="4.5" y="0" width="1.5" height="15" fill="black" />
+        <rect x="7.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="9.5" y="0" width="2.25" height="15" fill="black" />
+        <rect x="13.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="15" y="0" width="1.5" height="15" fill="black" />
+        <rect x="18" y="0" width="3" height="15" fill="black" />
+        <rect x="23" y="0" width="0.75" height="15" fill="black" />
+        <rect x="25.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="28" y="0" width="1.5" height="15" fill="black" />
+        <rect x="31" y="0" width="0.75" height="15" fill="black" />
+        <rect x="34" y="0" width="2.25" height="15" fill="black" />
+        <rect x="38" y="0" width="1.5" height="15" fill="black" />
+        <rect x="41.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="43" y="0" width="3" height="15" fill="black" />
+        <rect x="48" y="0" width="1.5" height="15" fill="black" />
+        <rect x="51.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="54" y="0" width="2.25" height="15" fill="black" />
+        <rect x="58.5" y="0" width="1.5" height="15" fill="black" />
+        <rect x="62" y="0" width="0.75" height="15" fill="black" />
+        <rect x="64" y="0" width="3" height="15" fill="black" />
+        <rect x="69" y="0" width="1.5" height="15" fill="black" />
+        <rect x="72.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="74" y="0" width="2.25" height="15" fill="black" />
+        <rect x="78.5" y="0" width="1.5" height="15" fill="black" />
+        <rect x="82" y="0" width="0.75" height="15" fill="black" />
+        <rect x="84.5" y="0" width="3" height="15" fill="black" />
+        <rect x="90" y="0" width="1.5" height="15" fill="black" />
+        <rect x="93" y="0" width="0.75" height="15" fill="black" />
+        <rect x="95.5" y="0" width="0.75" height="15" fill="black" />
+        <rect x="98" y="0" width="1.5" height="15" fill="black" />
+      </svg>
+    `;
+
+    const qrHtml = `
+      <svg viewBox="0 0 29 29" width="36" height="36" style="display: block;">
+        <path d="M0 0h7v7H0zm1 1v5h5V1zm1 1h3v3H2zm6-2h1v1H8zm1 1h1v2H9zm1-1h2v1h-2zm2 1h1v1h-1zm-1 1h1v1h-1zm2-2h1v1h-1zm1 1h1v2h-1zm1-1h1v1h-1zm2 1h1v1h-1zm-1 1h1v1h-1zm2-2h3v1h-3zm1 1h1v1h-1zm1 0h1v1h-1zm1-1h1v1h-1zm-1 2h1v1h-1zm2-1h1v1h-1zm-2 1v1h-1v-1zm4-2h1v3h-1zm-2 2h1v1h-1zm2 1h1v1h-1zm-1 1h1v1h-1zm1-1h1v2h-1zm-1 1h-1v1h1zm-1 1h-1v1h1zm4-3v2h-1v-2zm-3 2v1h-1v-1zm1 1v1h-1v-1zm4-2h1v1h-1zm0 2h1v1h-1zm1-1v1h-1v-1zm-2-5h1v1h-1zm1 1h1v1h-1zm1-1h1v2h-1zm2-1v1h-1v-1zm-1 2v1h-1v-1zm2-2h1v2h-1zm0 2v1h-1v-1z" fill="black" />
+        <path d="M22 0h7v7h-7zm1 1v5h5V1zm1 1h3v3H3zm-24 22h7v7H0zm1 1v5h5v-5zm1 1h3v3H2zm22 1v1h2v-1zm1 1v1h1v-1zm-1 1v1h2v-1z" fill="black" />
+      </svg>
+    `;
+
+    // 2. Prepare HTML & page size styles
+    let htmlContent = '';
+    let customStyles = '';
+
+    if (type === 'etiquette') {
+      htmlContent = `
+        <div class="etiquette-container">
+          <div class="etiquette-header">
+            <span class="etiquette-brand">BlueCom</span>
+            <span class="etiquette-id">${editingTicket.id}</span>
+          </div>
+          <div class="etiquette-barcode">
+            ${barcodeHtml}
+          </div>
+          <div class="etiquette-footer">
+            <span class="etiquette-model">${editingTicket.modele || 'Modèle'}</span>
+            <span class="etiquette-client">${editingTicket.nomClient}</span>
+          </div>
+        </div>
+      `;
+
+      customStyles = `
+        @page {
+          size: 40mm 20mm;
+          margin: 0;
+        }
+        body {
+          width: 40mm;
+          height: 20mm;
+          overflow: hidden;
+          margin: 0;
+          padding: 0;
+        }
+        .etiquette-container {
+          width: 40mm;
+          height: 20mm;
+          padding: 1.2mm 2mm 0.8mm 2mm;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          background: white;
+          color: black;
+          box-sizing: border-box;
+        }
+        .etiquette-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 0.5px solid rgba(0, 0, 0, 0.4);
+          padding-bottom: 0.2mm;
+        }
+        .etiquette-brand {
+          font-size: 7.5px;
+          font-weight: 900;
+          text-transform: uppercase;
+          font-family: monospace;
+          letter-spacing: -0.2px;
+        }
+        .etiquette-id {
+          font-size: 9.5px;
+          font-weight: 900;
+          font-family: monospace;
+          background: black;
+          color: white;
+          padding: 0.2mm 1mm;
+          border-radius: 1px;
+          line-height: 1;
+        }
+        .etiquette-barcode {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 6.5mm;
+          margin: 0.4mm 0;
+        }
+        .etiquette-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-top: 0.5px solid rgba(0, 0, 0, 0.3);
+          padding-top: 0.4mm;
+          font-size: 6.5px;
+          line-height: 1.1;
+        }
+        .etiquette-model {
+          font-weight: 850;
+          text-transform: uppercase;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 21mm;
+        }
+        .etiquette-client {
+          font-weight: 900;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 14mm;
+          text-align: right;
+        }
+      `;
+    } else {
+      const formattedDate = formatFrenchDateTime(editingTicket.datePriseEnCharge || editingTicket.dateEntree);
+      const formattedPrice = formatDZD(editingTicket.prixFacture);
+      const docTitle = editingTicket.statut === 'Réparation terminée' ? 'BON DE RETRAIT' : 'BON DE RÉCEPTION';
+
+      htmlContent = `
+        <div class="bon-container">
+          <div class="bon-header">
+            <div class="bon-logo-group">
+              <div class="bon-logo-badge">BC</div>
+              <div class="bon-logo-text">
+                <span class="bon-brand-name">BlueCom Batna</span>
+                <span class="bon-brand-sub">Spécialiste Maintenance</span>
+              </div>
+            </div>
+            <div class="bon-header-right">
+              <h4 class="bon-doc-title">${docTitle}</h4>
+              <span class="bon-doc-subtitle">Document officiel d'intervention</span>
+            </div>
+          </div>
+
+          <div class="bon-tracking-section">
+            <div class="bon-tracking-info">
+              <span class="bon-tracking-label">TRACKING ID / DOSSIER</span>
+              <span class="bon-tracking-number">N° ${editingTicket.id}</span>
+            </div>
+            <div class="bon-tracking-barcode-container">
+              <div class="bon-tracking-barcode">
+                ${barcodeHtml}
+              </div>
+              <div class="bon-tracking-barcode-text">*${editingTicket.id}*</div>
+            </div>
+          </div>
+
+          <div class="bon-parties-section">
+            <div class="bon-column">
+              <span class="bon-column-title">EXPÉDITEUR (Boutique)</span>
+              <div class="bon-column-bold">BlueCom Batna</div>
+              <div>Cité 1000 logts, Batna</div>
+              <div class="bon-column-bold" style="font-family: monospace; font-size: 8px;">Tél: 0555 456 789 / 0770 123 456</div>
+              <div style="font-size: 7px; color: #333;">E-mail: contact@bluecom.dz</div>
+            </div>
+
+            <div class="bon-column">
+              <span class="bon-column-title">DESTINATAIRE (Client)</span>
+              <div class="bon-column-bold">Nom: ${editingTicket.nomClient}</div>
+              <div>Appareil: <span class="bon-column-bold" style="text-transform: uppercase;">${editingTicket.modele || 'Non renseigné'}</span></div>
+              <div class="bon-column-bold" style="font-family: monospace; font-size: 8px;">Tél: ${editingTicket.telephoneClient || 'Non fourni'}</div>
+              <div style="font-size: 7.5px;">Statut: <span style="text-decoration: underline; font-weight: bold; text-transform: uppercase;">${editingTicket.statut}</span></div>
+            </div>
+          </div>
+
+          <div class="bon-date-box">
+            <span class="bon-date-box-label">DATE DE PRISE EN CHARGE :</span>
+            <span class="bon-date-box-value">${formattedDate}</span>
+          </div>
+
+          <div class="bon-table-section">
+            <div class="bon-table-desc-col">
+              <span class="bon-table-col-title">DESCRIPTION DE LA PANNE ET RECOMMANDATIONS CONSTATÉES</span>
+              <div class="bon-table-desc-text">${editingTicket.descriptionProbleme || "Aucune description de panne."}</div>
+            </div>
+
+            <div class="bon-table-price-col">
+              <span class="bon-table-col-title" style="margin-bottom: 0;">MONTANT TOTAL DÛ</span>
+              <div>
+                <div class="bon-table-price-value">${formattedPrice}</div>
+                <div class="bon-table-price-sublabel">Net à payer (DZD)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bon-footer-section">
+            <div class="bon-footer-qr">
+              ${qrHtml}
+            </div>
+            <div class="bon-footer-rules">
+              * conditions de prise en charge : les appareils doivent être récupérés sous 30 jours à dater de l'appel. passé ce délai, bluecom batna décline toute responsabilité en cas de perte de données ou de dysfonctionnements secondaires. aucun retrait possible sans ce bon d'intervention officiel.
+            </div>
+          </div>
+        </div>
+      `;
+
+      customStyles = `
+        @page {
+          size: 148mm 105mm;
+          margin: 0;
+        }
+        body {
+          width: 148mm;
+          height: 105mm;
+          overflow: hidden;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        .bon-container {
+          width: 148mm;
+          height: 105mm;
+          padding: 4mm 5mm 3mm 5mm;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          background: white;
+          color: black;
+          border: 1px solid black;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+        .bon-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1.5px solid black;
+          padding-bottom: 1.5mm;
+        }
+        .bon-logo-group {
+          display: flex;
+          align-items: center;
+          gap: 2mm;
+        }
+        .bon-logo-badge {
+          background: black;
+          color: white;
+          font-weight: 900;
+          font-size: 12px;
+          width: 6mm;
+          height: 6mm;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: monospace;
+          line-height: 1;
+        }
+        .bon-logo-text {
+          display: flex;
+          flex-direction: column;
+        }
+        .bon-brand-name {
+          font-size: 12px;
+          font-weight: 900;
+          text-transform: uppercase;
+          line-height: 1;
+        }
+        .bon-brand-sub {
+          font-size: 7px;
+          color: #555;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.3px;
+        }
+        .bon-header-right {
+          text-align: right;
+        }
+        .bon-doc-title {
+          font-size: 12px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          line-height: 1;
+          margin: 0;
+        }
+        .bon-doc-subtitle {
+          font-size: 7px;
+          color: #555;
+          font-weight: 700;
+          text-transform: uppercase;
+        }
+        .bon-tracking-section {
+          display: grid;
+          grid-template-columns: 5fr 7fr;
+          align-items: center;
+          border-bottom: 1px solid black;
+          padding: 1mm 0;
+          gap: 4mm;
+        }
+        .bon-tracking-info {
+          display: flex;
+          flex-direction: column;
+        }
+        .bon-tracking-label {
+          font-size: 7px;
+          font-weight: 900;
+          color: #444;
+          text-transform: uppercase;
+          font-family: monospace;
+        }
+        .bon-tracking-number {
+          font-size: 15px;
+          font-weight: 955;
+          font-family: monospace;
+          margin-top: 0.5mm;
+          line-height: 1;
+        }
+        .bon-tracking-barcode-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .bon-tracking-barcode {
+          width: 100%;
+          height: 6.5mm;
+        }
+        .bon-tracking-barcode-text {
+          font-size: 7px;
+          font-family: monospace;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          margin-top: 0.5mm;
+        }
+        .bon-parties-section {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6mm;
+          padding: 1.5mm 0;
+        }
+        .bon-column {
+          font-size: 8px;
+          line-height: 1.35;
+          color: #111;
+        }
+        .bon-column-title {
+          font-size: 7px;
+          font-weight: 900;
+          color: #444;
+          text-transform: uppercase;
+          border-bottom: 0.5px solid black;
+          padding-bottom: 0.5mm;
+          margin-bottom: 1mm;
+          font-family: monospace;
+          display: block;
+        }
+        .bon-column-bold {
+          font-weight: 900;
+          color: black;
+        }
+        .bon-date-box {
+          background: #f3f4f6;
+          border: 0.5px solid #d1d5db;
+          border-radius: 3px;
+          padding: 1mm 2mm;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 8px;
+          font-weight: 800;
+          margin: 1mm 0;
+        }
+        .bon-date-box-label {
+          text-transform: uppercase;
+        }
+        .bon-date-box-value {
+          font-family: monospace;
+        }
+        .bon-table-section {
+          display: grid;
+          grid-template-columns: 8fr 4fr;
+          border: 1px solid black;
+          border-radius: 3px;
+          overflow: hidden;
+          margin: 1mm 0;
+        }
+        .bon-table-desc-col {
+          padding: 1.5mm 2mm;
+          border-right: 1px solid black;
+          min-height: 11mm;
+        }
+        .bon-table-col-title {
+          font-size: 6.5px;
+          font-weight: 900;
+          color: #444;
+          text-transform: uppercase;
+          display: block;
+          margin-bottom: 0.5mm;
+        }
+        .bon-table-desc-text {
+          font-size: 9px;
+          font-weight: 750;
+          font-style: italic;
+          line-height: 1.25;
+        }
+        .bon-table-price-col {
+          background: #f9fafb;
+          padding: 1.5mm 2mm;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          text-align: right;
+        }
+        .bon-table-price-value {
+          font-size: 14.5px;
+          font-weight: 950;
+          font-family: monospace;
+          line-height: 1;
+        }
+        .bon-table-price-sublabel {
+          font-size: 6px;
+          font-weight: 900;
+          color: #555;
+          text-transform: uppercase;
+        }
+        .bon-footer-section {
+          display: flex;
+          align-items: center;
+          gap: 3mm;
+          border-top: 0.5px solid #ccc;
+          padding-top: 1.5mm;
+          margin-top: 0.5mm;
+        }
+        .bon-footer-qr {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .bon-footer-rules {
+          font-size: 6px;
+          font-weight: 700;
+          text-align: justify;
+          line-height: 1.2;
+          text-transform: uppercase;
+          color: #222;
+        }
+      `;
+    }
+
+    // 3. Create invisible printing Iframe
+    const existingFrame = document.getElementById('print-iframe');
+    if (existingFrame) {
+      existingFrame.remove();
+    }
+
+    const printFrame = document.createElement('iframe');
+    printFrame.id = 'print-iframe';
+    printFrame.style.position = 'fixed';
+    printFrame.style.right = '0';
+    printFrame.style.bottom = '0';
+    printFrame.style.width = '0';
+    printFrame.style.height = '0';
+    printFrame.style.border = '0';
+    printFrame.style.margin = '0';
+    printFrame.style.padding = '0';
     
-    // 3. Fire local document print execution
-    setTimeout(() => {
-      window.print();
+    document.body.appendChild(printFrame);
+    
+    const iframeDoc = printFrame.contentDocument || printFrame.contentWindow?.document;
+    if (!iframeDoc) {
+      console.error("Unable to access print iframe document.");
+      return;
+    }
+    
+    const fullContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${type === 'etiquette' ? 'Etiquette' : 'Bon'} - ${editingTicket.id}</title>
+          <style>
+            * {
+              box-sizing: border-box;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+            body {
+              margin: 0;
+              padding: 0;
+              background: white !important;
+              color: black !important;
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+              -webkit-font-smoothing: antialiased;
+            }
+            ${customStyles}
+          </style>
+        </head>
+        <body>
+          ${htmlContent}
+        </body>
+      </html>
+    `;
+    
+    iframeDoc.open();
+    iframeDoc.write(fullContent);
+    iframeDoc.close();
+    
+    const win = printFrame.contentWindow;
+    if (win) {
+      win.focus();
       
-      // 4. Remove rules to clean up screens
-      document.body.classList.remove(`print-${type}-active`);
-      document.body.classList.remove('print-mode-active');
-      const styleTag = document.getElementById('print-page-size-style');
-      if (styleTag) styleTag.remove();
-    }, 150);
+      // Hook print to onload event
+      win.onload = function() {
+        setTimeout(() => {
+          win.print();
+          setTimeout(() => {
+            if (document.body.contains(printFrame)) {
+              document.body.removeChild(printFrame);
+            }
+          }, 600);
+        }, 80);
+      };
+
+      // Fallback print activation
+      setTimeout(() => {
+        if (document.body.contains(printFrame)) {
+          win.print();
+          setTimeout(() => {
+            if (document.body.contains(printFrame)) {
+              document.body.removeChild(printFrame);
+            }
+          }, 600);
+        }
+      }, 500);
+    }
   };
 
   // Instant calculated margin badge
@@ -607,147 +1146,6 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         </div>
       </div>
     </form>
-
-      {/* PRINT SCHEMES - HIDDEN BY DEFAULT ON VIEWPORTS */}
-      {editingTicket && (
-        <div id="print-templates-container">
-          {/* Etiquette Print Template */}
-          <div className="print-only print-template-etiquette select-none">
-            <div className="flex flex-col h-full justify-between leading-none text-black">
-              <div className="flex justify-between items-center border-b border-black/30 pb-[0.2mm]">
-                <span className="text-[6px] font-black uppercase font-mono tracking-tight">BlueCom</span>
-                <span className="text-[8px] font-black font-mono tracking-tighter bg-black text-white px-1 leading-none rounded-[1px]">
-                  {editingTicket.id}
-                </span>
-              </div>
-
-              <div className="py-[0.3mm] flex items-center justify-center">
-                <BarcodeSvg value={editingTicket.id} />
-              </div>
-
-              <div className="flex justify-between items-end border-t border-black/25 pt-[0.2mm] text-[5.5px] leading-tight">
-                <span className="font-extrabold truncate max-w-[20mm] uppercase">
-                  {editingTicket.modele || 'Modèle'}
-                </span>
-                <span className="font-black truncate max-w-[13mm] text-right">
-                  {editingTicket.nomClient}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bon de Réparation / Réception Print Template */}
-          <div className="print-only print-template-bon select-none">
-            <div className="h-full flex flex-col justify-between leading-tight text-white p-1 relative bg-white" style={{ color: 'black' }}>
-              
-              <div className="flex justify-between items-center border-b border-double border-black/40 pb-1">
-                <div className="flex items-center gap-1">
-                  <div className="w-4 h-4 bg-black rounded flex items-center justify-center">
-                    <span className="text-white font-black text-[9px] leading-none">BC</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black tracking-tight uppercase leading-none">BlueCom Batna</span>
-                    <span className="text-[6px] text-black/60 tracking-wider uppercase leading-none font-bold">Spécialiste Maintenance</span>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <h4 className="text-[9.5px] font-black tracking-wider uppercase leading-none text-black">
-                    {editingTicket.statut === 'Réparation terminée' ? 'BON DE RETRAIT' : 'BON DE RÉCEPTION'}
-                  </h4>
-                  <span className="text-[6px] text-black/60 uppercase font-mono font-bold leading-none mt-0.5 block">
-                    Document officiel d'intervention
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-12 gap-2 my-0.5 py-0.5 border-b border-black/10 items-center">
-                <div className="col-span-5 flex flex-col justify-center">
-                  <span className="text-[6px] font-black uppercase text-black/60 tracking-wider font-mono">TRACKING ID / DOSSIER</span>
-                  <span className="text-xs font-black tracking-tighter text-black select-all leading-none mt-0.5 font-mono">
-                    N° {editingTicket.id}
-                  </span>
-                </div>
-                <div className="col-span-7 flex flex-col">
-                  <div className="h-4 overflow-hidden w-full flex items-center justify-center">
-                    <BarcodeSvg value={editingTicket.id} />
-                  </div>
-                  <div className="text-[5.5px] font-mono text-center font-bold tracking-widest mt-0.5">
-                    *{editingTicket.id}*
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 pb-0.5">
-                <div className="border-r border-black/10 pr-1">
-                  <span className="text-[5.5px] font-black uppercase text-black/65 tracking-wider block border-b border-black/5 pb-0.5 mb-0.5 font-mono">
-                    EXPÉDITEUR (Boutique)
-                  </span>
-                  <div className="text-[7.5px] space-y-0.5 leading-tight">
-                    <p className="font-extrabold text-black">BlueCom Batna</p>
-                    <p className="text-black/80 font-semibold truncate text-[7px]">Cité 1000 logts, Batna</p>
-                    <p className="font-mono text-black/95 font-bold text-[7px]">Tél: 0555 456 789 / 0770 123 456</p>
-                    <p className="text-black/80 font-semibold truncate text-[6.5px]">E-mail: contact@bluecom.dz</p>
-                  </div>
-                </div>
-
-                <div className="pl-1">
-                  <span className="text-[5.5px] font-black uppercase text-black/65 tracking-wider block border-b border-black/5 pb-0.5 mb-0.5 font-mono">
-                    DESTINATAIRE (Client)
-                  </span>
-                  <div className="text-[7.5px] space-y-0.5 leading-tight">
-                    <p className="font-extrabold text-black truncate">Nom: {editingTicket.nomClient}</p>
-                    <p className="font-semibold text-black/95">Appareil: <span className="font-extrabold uppercase text-[7px]">{editingTicket.modele || 'Non renseigné'}</span></p>
-                    <p className="font-mono text-black/95 font-bold">Tél: {editingTicket.telephoneClient || 'Non fourni'}</p>
-                    <p className="text-black/75 text-[6.5px] font-semibold">Statut: <span className="underline font-bold uppercase">{editingTicket.statut}</span></p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-black/5 border border-black/10 rounded px-1 py-0.5 flex justify-between items-center text-[7px] font-bold my-0.5">
-                <span className="tracking-wider">DATE DE PRISE EN CHARGE :</span>
-                <span className="font-mono">{formatFrenchDateTime(editingTicket.datePriseEnCharge || editingTicket.dateEntree)}</span>
-              </div>
-
-              <div className="grid grid-cols-12 border border-black/20 rounded overflow-hidden my-0.5">
-                <div className="col-span-8 p-1 border-r border-black/20 bg-white min-h-[9mm]">
-                  <span className="text-[5.5px] font-black uppercase text-black/60 tracking-wider block mb-0.5">
-                    DESCRIPTION DE LA PANNE ET RECOMMANDATIONS CONSTATED
-                  </span>
-                  <div className="text-[7.5px] font-medium leading-tight text-black italic line-clamp-2">
-                    {editingTicket.descriptionProbleme || "Aucune description de panne."}
-                  </div>
-                </div>
-
-                <div className="col-span-4 bg-black/5 p-1 flex flex-col justify-between text-right">
-                  <span className="text-[5px] font-black uppercase text-black/65 tracking-wider block leading-none">
-                    MONTANT TOTAL DU
-                  </span>
-                  <div className="flex flex-col items-end justify-center h-full">
-                    <span className="text-[11.5px] font-black tracking-tight text-black font-mono leading-none">
-                      {formatDZD(editingTicket.prixFacture)}
-                    </span>
-                    <span className="text-[5px] text-black/60 font-black uppercase tracking-wider leading-none mt-0.5">
-                      Net à payer (DZD)
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 border-t border-black/15 pt-1 mt-0.5">
-                <div className="shrink-0 flex items-center justify-center">
-                  <QrCodeSvg />
-                </div>
-                <div className="flex-1">
-                  <p className="text-[5.4px] font-semibold text-black/90 leading-tight text-justify uppercase tracking-tighter">
-                    * conditions de prise en charge : les appareils doivent être récupérés sous 30 jours à dater de l'appel. passé ce délai, bluecom batna décline toute responsabilité en cas de perte de données ou de dysfonctionnements secondaires. aucun retrait possible sans ce bon d'intervention officiel.
-                  </p>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
