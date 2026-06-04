@@ -376,16 +376,16 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
               <span class="bon-column-title">EXPÉDITEUR (Boutique)</span>
               <div class="bon-column-bold">BlueCom Batna</div>
               <div>Cité 1000 logts, Batna</div>
-              <div class="bon-column-bold" style="font-family: monospace; font-size: 8.5px;">Tél: 0555 456 789 / 0770 123 456</div>
-              <div style="font-size: 8px; color: #111;">E-mail: contact@bluecom.dz</div>
+              <div class="bon-column-bold" style="font-family: monospace; font-size: 10.5px;">Tél: 0555 456 789 / 0770 123 456</div>
+              <div style="font-size: 9.5px; color: #111;">E-mail: contact@bluecom.dz</div>
             </div>
 
             <div class="bon-column">
               <span class="bon-column-title">DESTINATAIRE (Client)</span>
               <div class="bon-column-bold">Nom: ${editingTicket.nomClient}</div>
-              <div style="font-size: 8.5px;">Appareil: <span class="bon-column-bold" style="text-transform: uppercase;">${editingTicket.modele || 'Non renseigné'}</span></div>
-              <div class="bon-column-bold" style="font-family: monospace; font-size: 8.5px;">Tél: ${editingTicket.telephoneClient || 'Non fourni'}</div>
-              <div style="font-size: 8.2px;">Statut: <span style="text-decoration: underline; font-weight: bold; text-transform: uppercase;">${editingTicket.statut}</span></div>
+              <div style="font-size: 10px;">Appareil: <span class="bon-column-bold" style="text-transform: uppercase;">${editingTicket.modele || 'Non renseigné'}</span></div>
+              <div class="bon-column-bold" style="font-family: monospace; font-size: 10.5px;">Tél: ${editingTicket.telephoneClient || 'Non fourni'}</div>
+              <div style="font-size: 10px;">Statut: <span style="text-decoration: underline; font-weight: bold; text-transform: uppercase;">${editingTicket.statut}</span></div>
             </div>
           </div>
 
@@ -420,25 +420,26 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
       customStyles = `
         @page {
           size: 210mm 148mm;
-          margin: 0;
+          margin: 0 !important;
         }
-        body {
+        html, body {
           width: 210mm;
           height: 148mm;
-          overflow: hidden;
-          margin: 0;
-          padding: 0;
+          overflow: hidden !important;
+          margin: 0 !important;
+          padding: 0 !important;
           box-sizing: border-box;
           background: white !important;
+          transform: none !important;
         }
         .bon-container {
-          width: 98mm;
-          max-width: 98mm;
+          width: 92mm;
+          max-width: 92mm;
           height: 142mm;
           max-height: 142mm;
-          margin-left: 2mm;
+          margin-left: 5mm;
           margin-top: 3mm;
-          padding: 3mm 4mm;
+          padding: 3.5mm 4.5mm;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
@@ -459,15 +460,15 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .bon-logo-group {
           display: flex;
           align-items: center;
-          gap: 2mm;
+          gap: 2.2mm;
         }
         .bon-logo-badge {
           background: black;
           color: white;
-          font-weight: 900;
-          font-size: 11px;
-          width: 5.5mm;
-          height: 5.5mm;
+          font-weight: 950;
+          font-size: 13px;
+          width: 6.5mm;
+          height: 6.5mm;
           border-radius: 2px;
           display: flex;
           align-items: center;
@@ -480,33 +481,33 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           flex-direction: column;
         }
         .bon-brand-name {
-          font-size: 11.5px;
-          font-weight: 900;
+          font-size: 13.5px;
+          font-weight: 955;
           text-transform: uppercase;
           line-height: 1;
         }
         .bon-brand-sub {
-          font-size: 7px;
+          font-size: 8px;
           color: #444;
-          font-weight: 700;
+          font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 0.2px;
+          letter-spacing: 0.3px;
         }
         .bon-header-right {
           text-align: center;
         }
         .bon-doc-title {
-          font-size: 11.5px;
-          font-weight: 900;
+          font-size: 13.5px;
+          font-weight: 950;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           line-height: 1;
           margin: 0 0 0.2mm 0;
         }
         .bon-doc-subtitle {
-          font-size: 7px;
+          font-size: 8px;
           color: #444;
-          font-weight: 700;
+          font-weight: 800;
           text-transform: uppercase;
         }
         .bon-tracking-section {
@@ -514,11 +515,11 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           flex-direction: column;
           align-items: center;
           border-bottom: 1px solid black;
-          padding: 1.5mm 0;
+          padding: 1.8mm 0;
           background: #f9fafb;
           border-radius: 3px;
-          border: 1px dashed black;
-          margin: 1.2mm 0;
+          border: 1.2px dashed black;
+          margin: 1.5mm 0;
         }
         .bon-tracking-info {
           display: flex;
@@ -527,15 +528,15 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           align-items: center;
         }
         .bon-tracking-label {
-          font-size: 8px;
-          font-weight: 900;
+          font-size: 10px;
+          font-weight: 950;
           color: #333;
           text-transform: uppercase;
           font-family: monospace;
           letter-spacing: 0.5px;
         }
         .bon-tracking-number {
-          font-size: 15px;
+          font-size: 18px;
           font-weight: 950;
           font-family: monospace;
           line-height: 1;
@@ -543,43 +544,44 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .bon-parties-section {
           display: flex;
           flex-direction: column;
-          gap: 2.2mm;
-          padding: 1mm 0;
+          gap: 2.5mm;
+          padding: 1.2mm 0;
         }
         .bon-column {
-          font-size: 8.5px;
-          line-height: 1.35;
+          font-size: 10.5px;
+          line-height: 1.4;
           color: #111;
         }
         .bon-column-title {
-          font-size: 7.5px;
+          font-size: 9.5px;
           font-weight: 950;
-          color: #222;
+          color: #111;
           text-transform: uppercase;
-          border-bottom: 0.8px solid black;
-          padding-bottom: 0.3mm;
-          margin-bottom: 0.8mm;
+          border-bottom: 1px solid black;
+          padding-bottom: 0.4mm;
+          margin-bottom: 1mm;
           font-family: monospace;
           display: block;
         }
         .bon-column-bold {
-          font-weight: 900;
+          font-weight: 950;
           color: black;
         }
         .bon-date-box {
           background: #f3f4f6;
-          border: 0.5px solid #ccc;
+          border: 0.5px solid #bbb;
           border-radius: 3px;
-          padding: 1.2mm 2mm;
+          padding: 1.5mm 2.5mm;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-size: 8.5px;
-          font-weight: 800;
-          margin: 1.2mm 0;
+          font-size: 10.5px;
+          font-weight: 850;
+          margin: 1.5mm 0;
         }
         .bon-date-box-label {
           text-transform: uppercase;
+          font-family: monospace;
         }
         .bon-date-box-value {
           font-family: monospace;
@@ -590,32 +592,32 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           border: 1.2px solid black;
           border-radius: 4px;
           overflow: hidden;
-          margin: 1.2mm 0;
+          margin: 1.5mm 0;
         }
         .bon-table-desc-col {
-          padding: 1.5mm 2.2mm;
+          padding: 1.8mm 2.5mm;
           border-bottom: 1.2px solid black;
           background: white;
           min-height: 12mm;
         }
         .bon-table-col-title {
-          font-size: 7px;
-          font-weight: 900;
+          font-size: 8.5px;
+          font-weight: 950;
           color: #333;
           text-transform: uppercase;
           display: block;
-          margin-bottom: 0.5mm;
+          margin-bottom: 0.6mm;
           font-family: monospace;
         }
         .bon-table-desc-text {
-          font-size: 9.5px;
-          font-weight: 800;
+          font-size: 11px;
+          font-weight: 855;
           font-style: italic;
-          line-height: 1.25;
+          line-height: 1.35;
         }
         .bon-table-price-col {
           background: #f9fafb;
-          padding: 1.5mm 2.2mm;
+          padding: 1.8mm 2.5mm;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -627,31 +629,31 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           align-items: flex-end;
         }
         .bon-table-price-value {
-          font-size: 14.5px;
+          font-size: 18px;
           font-weight: 950;
           font-family: monospace;
           line-height: 1;
         }
         .bon-table-price-sublabel {
-          font-size: 6px;
-          font-weight: 900;
+          font-size: 7.5px;
+          font-weight: 950;
           color: #555;
           text-transform: uppercase;
           line-height: 1;
-          margin-top: 0.2mm;
+          margin-top: 0.3mm;
         }
         .bon-footer-section {
           display: flex;
           align-items: center;
           border-top: 0.5px solid #ccc;
-          padding-top: 1.2mm;
-          margin-top: 0.8mm;
+          padding-top: 1.5mm;
+          margin-top: 1mm;
         }
         .bon-footer-rules {
-          font-size: 5.8px;
-          font-weight: 700;
+          font-size: 7px;
+          font-weight: 750;
           text-align: justify;
-          line-height: 1.25;
+          line-height: 1.3;
           text-transform: uppercase;
           color: #222;
         }
