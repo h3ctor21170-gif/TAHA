@@ -260,10 +260,11 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
             TICKET N° ${editingTicket.id}
           </div>
           <div class="etiquette-model">
-            ${(editingTicket.modele || 'Modèle inconnu').toUpperCase()}
+            ${(editingTicket.modele || 'Modèle').toUpperCase()}
           </div>
           <div class="etiquette-details">
             <div class="etiquette-line"><b>Client:</b> ${editingTicket.nomClient}</div>
+            <div class="etiquette-line"><b>Tél:</b> ${editingTicket.telephoneClient || 'Non fourni'}</div>
             <div class="etiquette-line"><b>Panne:</b> ${editingTicket.descriptionProbleme || 'Non spécifiée'}</div>
             <div class="etiquette-line etiquette-price"><b>Prix:</b> ${formatDZD(editingTicket.prixFacture)}</div>
           </div>
@@ -285,7 +286,7 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .etiquette-container {
           width: 40mm;
           height: 20mm;
-          padding: 1.2mm 1.8mm;
+          padding: 0.8mm 1.5mm 0.8mm 1.5mm;
           display: flex;
           flex-direction: column;
           background: white;
@@ -296,48 +297,48 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .etiquette-header {
           background: black;
           color: white;
-          font-size: 8px;
+          font-size: 11.5px;
           font-weight: 900;
           text-align: center;
-          padding: 0.5px 0;
+          padding: 0.2mm 0;
           border-radius: 1px;
           text-transform: uppercase;
-          line-height: 1.1;
-          margin-bottom: 0.8mm;
+          line-height: 1;
+          margin-bottom: 0.6mm;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
         }
         .etiquette-model {
-          font-size: 8px;
+          font-size: 10px;
           font-weight: 900;
           text-transform: uppercase;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          line-height: 1.15;
-          margin-bottom: 0.6mm;
-          border-bottom: 0.5px solid rgba(0, 0, 0, 0.26);
-          padding-bottom: 0.3mm;
+          line-height: 1.1;
+          margin-bottom: 0.5mm;
+          border-bottom: 0.8px solid #000;
+          padding-bottom: 0.4mm;
         }
         .etiquette-details {
           display: flex;
           flex-direction: column;
-          gap: 0.3px;
+          gap: 0.1mm;
         }
         .etiquette-line {
-          font-size: 6.6px;
+          font-size: 7.8px;
           color: black;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          line-height: 1.1;
+          line-height: 1;
         }
         .etiquette-line b {
-          font-weight: 850;
+          font-weight: 900;
         }
         .etiquette-price {
-          font-size: 7px;
+          font-size: 8.5px;
           font-weight: 900;
           margin-top: 0.2mm;
         }
