@@ -354,8 +354,8 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
             <div class="bon-logo-group">
               <div class="bon-logo-badge">BC</div>
               <div class="bon-logo-text">
-                <span class="bon-brand-name">BlueCom Batna</span>
-                <span class="bon-brand-sub">Spécialiste Maintenance</span>
+                <span class="bon-brand-name font-sans">BlueCom Batna</span>
+                <span class="bon-brand-sub font-mono">Spécialiste Maintenance</span>
               </div>
             </div>
             <div class="bon-header-right">
@@ -366,14 +366,8 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
 
           <div class="bon-tracking-section">
             <div class="bon-tracking-info">
-              <span class="bon-tracking-label">TRACKING ID / DOSSIER</span>
+              <span class="bon-tracking-label">TICKET DOSSIER :</span>
               <span class="bon-tracking-number">N° ${editingTicket.id}</span>
-            </div>
-            <div class="bon-tracking-barcode-container">
-              <div class="bon-tracking-barcode">
-                ${barcodeHtml}
-              </div>
-              <div class="bon-tracking-barcode-text">*${editingTicket.id}*</div>
             </div>
           </div>
 
@@ -382,16 +376,16 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
               <span class="bon-column-title">EXPÉDITEUR (Boutique)</span>
               <div class="bon-column-bold">BlueCom Batna</div>
               <div>Cité 1000 logts, Batna</div>
-              <div class="bon-column-bold" style="font-family: monospace; font-size: 7.5px;">Tél: 0555 456 789 / 0770 123 456</div>
-              <div style="font-size: 6.5px; color: #333;">E-mail: contact@bluecom.dz</div>
+              <div class="bon-column-bold" style="font-family: monospace; font-size: 8.5px;">Tél: 0555 456 789 / 0770 123 456</div>
+              <div style="font-size: 8px; color: #111;">E-mail: contact@bluecom.dz</div>
             </div>
 
             <div class="bon-column">
               <span class="bon-column-title">DESTINATAIRE (Client)</span>
               <div class="bon-column-bold">Nom: ${editingTicket.nomClient}</div>
-              <div style="font-size: 7.5px;">Appareil: <span class="bon-column-bold" style="text-transform: uppercase;">${editingTicket.modele || 'Non renseigné'}</span></div>
-              <div class="bon-column-bold" style="font-family: monospace; font-size: 7.5px;">Tél: ${editingTicket.telephoneClient || 'Non fourni'}</div>
-              <div style="font-size: 7px;">Statut: <span style="text-decoration: underline; font-weight: bold; text-transform: uppercase;">${editingTicket.statut}</span></div>
+              <div style="font-size: 8.5px;">Appareil: <span class="bon-column-bold" style="text-transform: uppercase;">${editingTicket.modele || 'Non renseigné'}</span></div>
+              <div class="bon-column-bold" style="font-family: monospace; font-size: 8.5px;">Tél: ${editingTicket.telephoneClient || 'Non fourni'}</div>
+              <div style="font-size: 8.2px;">Statut: <span style="text-decoration: underline; font-weight: bold; text-transform: uppercase;">${editingTicket.statut}</span></div>
             </div>
           </div>
 
@@ -416,9 +410,6 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           </div>
 
           <div class="bon-footer-section">
-            <div class="bon-footer-qr">
-              ${qrHtml}
-            </div>
             <div class="bon-footer-rules">
               * CONDITIONS DE REPRISE : LES APPAREILS DOIVENT ÊTRE RÉCUPÉRÉS SOUS 30 JOURS. APRÈS CE DÉLAI, BLUECOM BATNA DÉCLINE TOUTE RESPONSABILITÉ. RETRAIT IMPOSSIBLE SANS CE BON.
             </div>
@@ -441,19 +432,19 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           background: white !important;
         }
         .bon-container {
-          width: 105mm;
-          max-width: 105mm;
-          height: 148mm;
-          max-height: 148mm;
-          margin-left: 0;
-          margin-right: auto;
-          padding: 2.2mm 3.5mm;
+          width: 98mm;
+          max-width: 98mm;
+          height: 142mm;
+          max-height: 142mm;
+          margin-left: 2mm;
+          margin-top: 3mm;
+          padding: 3mm 4mm;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           background: white;
           color: black;
-          border: 1.2px solid black;
+          border: 1.5px solid black;
           border-radius: 4px;
           box-sizing: border-box;
         }
@@ -462,21 +453,21 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           flex-direction: column;
           align-items: center;
           border-bottom: 1.2px solid black;
-          padding-bottom: 1mm;
-          gap: 0.8mm;
+          padding-bottom: 1.2mm;
+          gap: 1mm;
         }
         .bon-logo-group {
           display: flex;
           align-items: center;
-          gap: 1.5mm;
+          gap: 2mm;
         }
         .bon-logo-badge {
           background: black;
           color: white;
           font-weight: 900;
-          font-size: 10px;
-          width: 5mm;
-          height: 5mm;
+          font-size: 11px;
+          width: 5.5mm;
+          height: 5.5mm;
           border-radius: 2px;
           display: flex;
           align-items: center;
@@ -489,13 +480,13 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           flex-direction: column;
         }
         .bon-brand-name {
-          font-size: 10.5px;
+          font-size: 11.5px;
           font-weight: 900;
           text-transform: uppercase;
           line-height: 1;
         }
         .bon-brand-sub {
-          font-size: 6px;
+          font-size: 7px;
           color: #444;
           font-weight: 700;
           text-transform: uppercase;
@@ -505,7 +496,7 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           text-align: center;
         }
         .bon-doc-title {
-          font-size: 10px;
+          font-size: 11.5px;
           font-weight: 900;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -513,7 +504,7 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           margin: 0 0 0.2mm 0;
         }
         .bon-doc-subtitle {
-          font-size: 6px;
+          font-size: 7px;
           color: #444;
           font-weight: 700;
           text-transform: uppercase;
@@ -523,65 +514,51 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           flex-direction: column;
           align-items: center;
           border-bottom: 1px solid black;
-          padding: 0.8mm 0;
-          gap: 0.5mm;
+          padding: 1.5mm 0;
+          background: #f9fafb;
+          border-radius: 3px;
+          border: 1px dashed black;
+          margin: 1.2mm 0;
         }
         .bon-tracking-info {
           display: flex;
-          justify-content: space-between;
+          justify-content: space-around;
           width: 100%;
           align-items: center;
         }
         .bon-tracking-label {
-          font-size: 6px;
+          font-size: 8px;
           font-weight: 900;
           color: #333;
           text-transform: uppercase;
           font-family: monospace;
+          letter-spacing: 0.5px;
         }
         .bon-tracking-number {
-          font-size: 12px;
+          font-size: 15px;
           font-weight: 950;
           font-family: monospace;
           line-height: 1;
         }
-        .bon-tracking-barcode-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 100%;
-          margin-top: 0.5mm;
-        }
-        .bon-tracking-barcode {
-          width: 100%;
-          height: 5.5mm;
-        }
-        .bon-tracking-barcode-text {
-          font-size: 6px;
-          font-family: monospace;
-          font-weight: 700;
-          letter-spacing: 1px;
-          margin-top: 0.3mm;
-        }
         .bon-parties-section {
           display: flex;
           flex-direction: column;
-          gap: 1.5mm;
+          gap: 2.2mm;
           padding: 1mm 0;
         }
         .bon-column {
-          font-size: 7.2px;
-          line-height: 1.25;
+          font-size: 8.5px;
+          line-height: 1.35;
           color: #111;
         }
         .bon-column-title {
-          font-size: 6px;
+          font-size: 7.5px;
           font-weight: 950;
           color: #222;
           text-transform: uppercase;
-          border-bottom: 0.5px solid black;
-          padding-bottom: 0.2mm;
-          margin-bottom: 0.5mm;
+          border-bottom: 0.8px solid black;
+          padding-bottom: 0.3mm;
+          margin-bottom: 0.8mm;
           font-family: monospace;
           display: block;
         }
@@ -593,13 +570,13 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           background: #f3f4f6;
           border: 0.5px solid #ccc;
           border-radius: 3px;
-          padding: 0.8mm 1.5mm;
+          padding: 1.2mm 2mm;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-size: 7px;
+          font-size: 8.5px;
           font-weight: 800;
-          margin: 0.8mm 0;
+          margin: 1.2mm 0;
         }
         .bon-date-box-label {
           text-transform: uppercase;
@@ -610,35 +587,35 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .bon-table-section {
           display: flex;
           flex-direction: column;
-          border: 1px solid black;
-          border-radius: 3px;
+          border: 1.2px solid black;
+          border-radius: 4px;
           overflow: hidden;
-          margin: 0.8mm 0;
+          margin: 1.2mm 0;
         }
         .bon-table-desc-col {
-          padding: 1.1mm 1.8mm;
-          border-bottom: 1px solid black;
+          padding: 1.5mm 2.2mm;
+          border-bottom: 1.2px solid black;
           background: white;
-          min-height: 8mm;
+          min-height: 12mm;
         }
         .bon-table-col-title {
-          font-size: 5.8px;
+          font-size: 7px;
           font-weight: 900;
           color: #333;
           text-transform: uppercase;
           display: block;
-          margin-bottom: 0.3mm;
+          margin-bottom: 0.5mm;
           font-family: monospace;
         }
         .bon-table-desc-text {
-          font-size: 7.8px;
-          font-weight: 750;
+          font-size: 9.5px;
+          font-weight: 800;
           font-style: italic;
-          line-height: 1.2;
+          line-height: 1.25;
         }
         .bon-table-price-col {
           background: #f9fafb;
-          padding: 1.1mm 1.8mm;
+          padding: 1.5mm 2.2mm;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -650,13 +627,13 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           align-items: flex-end;
         }
         .bon-table-price-value {
-          font-size: 11.5px;
+          font-size: 14.5px;
           font-weight: 950;
           font-family: monospace;
           line-height: 1;
         }
         .bon-table-price-sublabel {
-          font-size: 5px;
+          font-size: 6px;
           font-weight: 900;
           color: #555;
           text-transform: uppercase;
@@ -666,26 +643,15 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
         .bon-footer-section {
           display: flex;
           align-items: center;
-          gap: 1.5mm;
           border-top: 0.5px solid #ccc;
-          padding-top: 1mm;
-          margin-top: 0.5mm;
-        }
-        .bon-footer-qr {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .bon-footer-qr svg {
-          width: 25px !important;
-          height: 25px !important;
+          padding-top: 1.2mm;
+          margin-top: 0.8mm;
         }
         .bon-footer-rules {
-          font-size: 4.8px;
+          font-size: 5.8px;
           font-weight: 700;
           text-align: justify;
-          line-height: 1.15;
+          line-height: 1.25;
           text-transform: uppercase;
           color: #222;
         }
