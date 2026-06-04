@@ -29,6 +29,10 @@ export default function App() {
   // Settings Modal state
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [shopName, setShopName] = useState<string>('BlueCom Batna');
+  const [shopAddress, setShopAddress] = useState<string>('Cité 1000 logts, Batna');
+  const [shopPhone, setShopPhone] = useState<string>('0555 456 789 / 0770 123 456');
+  const [shopEmail, setShopEmail] = useState<string>('contact@bluecom.dz');
+  const [shopLogo, setShopLogo] = useState<string>('');
 
   // Load initial data on mount
   useEffect(() => {
@@ -59,6 +63,22 @@ export default function App() {
       if (storedShop) {
         setShopName(storedShop);
       }
+      const storedAddress = localStorage.getItem('bluecom_batna_shopaddress');
+      if (storedAddress) {
+        setShopAddress(storedAddress);
+      }
+      const storedPhone = localStorage.getItem('bluecom_batna_shopphone');
+      if (storedPhone) {
+        setShopPhone(storedPhone);
+      }
+      const storedEmail = localStorage.getItem('bluecom_batna_shopemail');
+      if (storedEmail) {
+        setShopEmail(storedEmail);
+      }
+      const storedLogo = localStorage.getItem('bluecom_batna_shoplogo');
+      if (storedLogo) {
+        setShopLogo(storedLogo);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -73,7 +93,7 @@ export default function App() {
     }
   }, [isDarkMode]);
 
-  // Save shop name changes
+  // Save shop identity changes to localStorage
   useEffect(() => {
     if (shopName) {
       try {
@@ -83,6 +103,44 @@ export default function App() {
       }
     }
   }, [shopName]);
+
+  useEffect(() => {
+    if (shopAddress) {
+      try {
+        localStorage.setItem('bluecom_batna_shopaddress', shopAddress);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [shopAddress]);
+
+  useEffect(() => {
+    if (shopPhone) {
+      try {
+        localStorage.setItem('bluecom_batna_shopphone', shopPhone);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [shopPhone]);
+
+  useEffect(() => {
+    if (shopEmail) {
+      try {
+        localStorage.setItem('bluecom_batna_shopemail', shopEmail);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [shopEmail]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('bluecom_batna_shoplogo', shopLogo);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [shopLogo]);
 
   // Core callback: Reset to initial demonstration data
   const handleResetAllTickets = () => {
@@ -233,6 +291,14 @@ export default function App() {
         isDarkMode={isDarkMode}
         shopName={shopName}
         setShopName={setShopName}
+        shopAddress={shopAddress}
+        setShopAddress={setShopAddress}
+        shopPhone={shopPhone}
+        setShopPhone={setShopPhone}
+        shopEmail={shopEmail}
+        setShopEmail={setShopEmail}
+        shopLogo={shopLogo}
+        setShopLogo={setShopLogo}
         onExportData={handleExportDataAsJSON}
       />
     </div>

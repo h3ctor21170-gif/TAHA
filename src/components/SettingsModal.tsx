@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { X, HardDrive, ShieldCheck, FileText, Download, Terminal, Settings } from 'lucide-react';
+import { X, HardDrive, ShieldCheck, FileText, Download, Settings, MapPin, Phone, Mail, Image } from 'lucide-react';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -11,10 +11,33 @@ interface SettingsModalProps {
   isDarkMode: boolean;
   shopName: string;
   setShopName: (val: string) => void;
+  shopAddress: string;
+  setShopAddress: (val: string) => void;
+  shopPhone: string;
+  setShopPhone: (val: string) => void;
+  shopEmail: string;
+  setShopEmail: (val: string) => void;
+  shopLogo: string;
+  setShopLogo: (val: string) => void;
   onExportData: () => void;
 }
 
-export default function SettingsModal({ isOpen, onClose, isDarkMode, shopName, setShopName, onExportData }: SettingsModalProps) {
+export default function SettingsModal({ 
+  isOpen, 
+  onClose, 
+  isDarkMode, 
+  shopName, 
+  setShopName,
+  shopAddress,
+  setShopAddress,
+  shopPhone,
+  setShopPhone,
+  shopEmail,
+  setShopEmail,
+  shopLogo,
+  setShopLogo,
+  onExportData 
+}: SettingsModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -81,27 +104,128 @@ export default function SettingsModal({ isOpen, onClose, isDarkMode, shopName, s
             </div>
           </div>
 
-          {/* Section 2: Electron Compilation instructions - FULL EXPLANATION DE PROD */}
-          <div className="p-4 rounded-xl border border-dashed border-slate-800/85 dark:bg-slate-950/30 space-y-3" id="settings-sec-compilation">
-            <div className="flex items-center space-x-2 text-blue-500" id="compilation-header">
-              <Terminal className="w-4 h-4" />
+          {/* Section 2: Coordonnées de l'Atelier / Boutique & Photo de Profil */}
+          <div className="p-5 rounded-2xl border dark:bg-slate-950/30 space-y-5 border-dashed border-slate-800" id="settings-sec-coordonnees">
+            <div className="flex items-center space-x-2 text-blue-500" id="coordonnees-header">
+              <Settings className="w-4 h-4" />
               <h4 className="text-xs font-bold uppercase tracking-wider">
-                Compilation vers Bureau Windows (.exe)
+                Coordonnées de l'Atelier (Expéditeur)
               </h4>
             </div>
-            
-            <p className="text-xs text-slate-400 leading-relaxed font-medium">
-              Ce projet intègre tous les fichiers de configuration nécessaires pour être compilé en tant qu'application autonome locale via la technologie <strong className="text-slate-300">Electron</strong>.
-            </p>
 
-            <div className="space-y-2 bg-slate-950/80 p-3.5 rounded-lg border border-slate-850 font-mono text-[10.5px] text-slate-300 leading-relaxed" id="compilation-codeblock">
-              <span className="text-slate-500 block mb-1"># Suivez ces étapes sur votre machine Windows locale :</span>
-              <p>1. <span className="text-blue-400">git clone</span> / téléchargez l'archive zip exportée depuis AI Studio.</p>
-              <p>2. Ouvrez un terminal dans le dossier racine de l'application.</p>
-              <p>3. Installez les paquets : <span className="text-emerald-400">npm install</span></p>
-              <p>4. Lancez en mode développement : <span className="text-emerald-400">npm run electron:dev</span></p>
-              <p>5. Compilez l'installeur Windows .exe final de production : <span className="text-amber-400">npm run electron:build</span></p>
-              <p className="text-slate-500 mt-2 block"># L'exécutable final sera généré dans le dossier `./dist_electron/`</p>
+            {/* Logo/PFP Section */}
+            <div className="flex flex-col sm:flex-row gap-5 items-center pb-4 border-b border-dashed dark:border-slate-800/80" id="pfp-upload-section">
+              <div className="relative group shrink-0" id="pfp-preview-container">
+                {shopLogo ? (
+                  <img 
+                    src={shopLogo} 
+                    alt="Logo Aperçu" 
+                    className="w-16 h-16 rounded-full object-cover border-2 border-blue-500 shadow-md"
+                  />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center border-2 border-dashed border-slate-705 text-slate-400 text-sm font-black select-none">
+                    BC
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 space-y-2 text-center sm:text-left" id="pfp-upload-actions">
+                <span className="text-[11px] font-bold text-slate-400 block">Photo de profil / Logo de boutique</span>
+                <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
+                  <label 
+                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold cursor-pointer transition-all flex items-center gap-1.5 shadow"
+                    htmlFor="logo-file-input"
+                  >
+                    <span>Choisir une image</span>
+                    <input 
+                      type="file"
+                      id="logo-file-input"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            if (typeof reader.result === 'string') {
+                              setShopLogo(reader.result);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </label>
+                  {shopLogo && (
+                    <button
+                      type="button"
+                      onClick={() => setShopLogo('')}
+                      className="px-3.5 py-1.5 bg-rose-600/20 hover:bg-rose-500 hover:text-white text-rose-500 rounded-lg text-xs font-bold transition-all"
+                    >
+                      Supprimer
+                    </button>
+                  )}
+                </div>
+                <p className="text-[9.5px] text-slate-500">Sera imprimée directement sur vos bons d'intervention et étiquettes.</p>
+              </div>
+            </div>
+
+            {/* Inputs grid */}
+            <div className="grid grid-cols-1 gap-4" id="atelier-coordonnees-inputs">
+              <div className="space-y-1" id="field-shop-address">
+                <label className="text-[11px] font-bold text-slate-400" htmlFor="inp-shop-address">
+                  Adresse de la boutique
+                </label>
+                <input 
+                  type="text"
+                  id="inp-shop-address"
+                  value={shopAddress}
+                  onChange={(e) => setShopAddress(e.target.value)}
+                  placeholder="Cité 1000 logts, Batna"
+                  className={`w-full text-xs px-3 py-2 rounded-lg border focus:outline-none focus:ring-1 ${
+                    isDarkMode 
+                      ? 'bg-slate-950 border-slate-800 text-slate-100 focus:ring-blue-500' 
+                      : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+                  }`}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1" id="field-shop-phone">
+                  <label className="text-[11px] font-bold text-slate-400" htmlFor="inp-shop-phone">
+                    Téléphones de contact
+                  </label>
+                  <input 
+                    type="text"
+                    id="inp-shop-phone"
+                    value={shopPhone}
+                    onChange={(e) => setShopPhone(e.target.value)}
+                    placeholder="0555 456 789 / 0770 123 456"
+                    className={`w-full text-xs px-3 py-2 rounded-lg border focus:outline-none focus:ring-1 ${
+                      isDarkMode 
+                        ? 'bg-slate-950 border-slate-800 text-slate-100 focus:ring-blue-500' 
+                        : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+                    }`}
+                  />
+                </div>
+
+                <div className="space-y-1" id="field-shop-email">
+                  <label className="text-[11px] font-bold text-slate-400" htmlFor="inp-shop-email">
+                    Adresse e-mail
+                  </label>
+                  <input 
+                    type="email"
+                    id="inp-shop-email"
+                    value={shopEmail}
+                    onChange={(e) => setShopEmail(e.target.value)}
+                    placeholder="contact@bluecom.dz"
+                    className={`w-full text-xs px-3 py-2 rounded-lg border focus:outline-none focus:ring-1 ${
+                      isDarkMode 
+                        ? 'bg-slate-950 border-slate-800 text-slate-100 focus:ring-blue-500' 
+                        : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600'
+                    }`}
+                  />
+                </div>
+              </div>
             </div>
           </div>
 

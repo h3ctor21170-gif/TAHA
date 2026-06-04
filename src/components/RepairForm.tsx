@@ -348,13 +348,20 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
       const formattedPrice = formatDZD(editingTicket.prixFacture);
       const docTitle = editingTicket.statut === 'Réparation terminée' ? 'BON DE RETRAIT' : 'BON DE RÉCEPTION';
 
+      // Load config from localStorage dynamically
+      const shopSavedName = localStorage.getItem('bluecom_batna_shopname') || 'BlueCom Batna';
+      const shopSavedAddress = localStorage.getItem('bluecom_batna_shopaddress') || 'Cité 1000 logts, Batna';
+      const shopSavedPhone = localStorage.getItem('bluecom_batna_shopphone') || '0555 456 789 / 0770 123 456';
+      const shopSavedEmail = localStorage.getItem('bluecom_batna_shopemail') || 'contact@bluecom.dz';
+      const shopSavedLogo = localStorage.getItem('bluecom_batna_shoplogo') || '';
+
       htmlContent = `
         <div class="bon-container">
           <div class="bon-header">
             <div class="bon-logo-group">
-              <div class="bon-logo-badge">BC</div>
+              ${shopSavedLogo ? `<img src="${shopSavedLogo}" style="width: 8.5mm; height: 8.5mm; border-radius: 50%; object-fit: cover; border: 1px solid black; flex-shrink: 0;" />` : '<div class="bon-logo-badge">BC</div>'}
               <div class="bon-logo-text">
-                <span class="bon-brand-name font-sans">BlueCom Batna</span>
+                <span class="bon-brand-name font-sans">${shopSavedName}</span>
                 <span class="bon-brand-sub font-mono">Spécialiste Maintenance</span>
               </div>
             </div>
@@ -374,10 +381,15 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           <div class="bon-parties-section">
             <div class="bon-column">
               <span class="bon-column-title">EXPÉDITEUR (Boutique)</span>
-              <div class="bon-column-bold">BlueCom Batna</div>
-              <div>Cité 1000 logts, Batna</div>
-              <div class="bon-column-bold" style="font-family: monospace; font-size: 10.5px;">Tél: 0555 456 789 / 0770 123 456</div>
-              <div style="font-size: 9.5px; color: #111;">E-mail: contact@bluecom.dz</div>
+              <div style="display: flex; gap: 2.5mm; align-items: center;">
+                ${shopSavedLogo ? `<img src="${shopSavedLogo}" style="width: 13.5mm; height: 13.5mm; border-radius: 50%; object-fit: cover; border: 1px solid black; flex-shrink: 0;" />` : ''}
+                <div>
+                  <div class="bon-column-bold">${shopSavedName}</div>
+                  <div style="font-size: 9px; line-height: 1.1; margin-bottom: 0.3mm;">${shopSavedAddress}</div>
+                  <div class="bon-column-bold" style="font-family: monospace; font-size: 10.5px; line-height: 1;">Tél: ${shopSavedPhone}</div>
+                  <div style="font-size: 9px; color: #111; line-height: 1;">E-mail: ${shopSavedEmail}</div>
+                </div>
+              </div>
             </div>
 
             <div class="bon-column">
@@ -411,7 +423,7 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
 
           <div class="bon-footer-section">
             <div class="bon-footer-rules">
-              * CONDITIONS DE REPRISE : LES APPAREILS DOIVENT ÊTRE RÉCUPÉRÉS SOUS 30 JOURS. APRÈS CE DÉLAI, BLUECOM BATNA DÉCLINE TOUTE RESPONSABILITÉ. RETRAIT IMPOSSIBLE SANS CE BON.
+              * CONDITIONS DE REPRISE : LES APPAREILS DOIVENT ÊTRE RÉCUPÉRÉS SOUS 30 JOURS. APRÈS CE DÉLAI, ${shopSavedName.toUpperCase()} DÉCLINE TOUTE RESPONSABILITÉ. RETRAIT IMPOSSIBLE SANS CE BON.
             </div>
           </div>
         </div>
