@@ -734,29 +734,26 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
     if (win) {
       win.focus();
       
-      // Hook print to onload event
-      win.onload = function() {
+      let isPrinted = false;
+      const doPrint = () => {
+        if (isPrinted) return;
+        isPrinted = true;
+        win.focus();
+        win.print();
         setTimeout(() => {
-          win.print();
-          setTimeout(() => {
-            if (document.body.contains(printFrame)) {
-              document.body.removeChild(printFrame);
-            }
-          }, 600);
-        }, 80);
+          if (document.body.contains(printFrame)) {
+            document.body.removeChild(printFrame);
+          }
+        }, 600);
       };
 
-      // Fallback print activation
-      setTimeout(() => {
-        if (document.body.contains(printFrame)) {
-          win.print();
-          setTimeout(() => {
-            if (document.body.contains(printFrame)) {
-              document.body.removeChild(printFrame);
-            }
-          }, 600);
-        }
-      }, 500);
+      // Hook print to onload event
+      win.onload = function() {
+        setTimeout(doPrint, 80);
+      };
+
+      // Fallback print activation in case onload doesn't fire
+      setTimeout(doPrint, 500);
     }
   };
 
