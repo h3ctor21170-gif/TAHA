@@ -356,20 +356,93 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
       const shopSavedLogo = localStorage.getItem('bluecom_batna_shoplogo') || '';
 
       htmlContent = `
-        <div class="bon-container">
-          <div class="bon-header">
-            <div class="bon-logo-group">
-              ${shopSavedLogo ? `<img src="${shopSavedLogo}" style="width: 8.5mm; height: 8.5mm; border-radius: 50%; object-fit: cover; border: 1px solid black; flex-shrink: 0;" />` : '<div class="bon-logo-badge">BC</div>'}
-              <div class="bon-logo-text">
-                <span class="bon-brand-name font-sans">${shopSavedName}</span>
-                <span class="bon-brand-sub font-mono">Spécialiste Maintenance</span>
+        <div style="display: flex; flex-direction: row; width: 210mm; height: 148mm; align-items: start; box-sizing: border-box; background: white;">
+          ${(() => {
+            const renderSingleBon = (copyTitle: string) => `
+              <div class="bon-container">
+                <div class="bon-header">
+                  <div class="bon-logo-group">
+                    ${shopSavedLogo ? `<img src="${shopSavedLogo}" style="width: 7.5mm; height: 7.5mm; border-radius: 50%; object-fit: cover; border: 1px solid black; flex-shrink: 0;" />` : '<div class="bon-logo-badge">BC</div>'}
+                    <div class="bon-logo-text">
+                      <span class="bon-brand-name font-sans">${shopSavedName}</span>
+                      <span class="bon-brand-sub font-mono">Spécialiste Maintenance</span>
+                    </div>
+                  </div>
+                  <div class="bon-header-right">
+                    <h4 class="bon-doc-title">${docTitle}</h4>
+                    <span class="bon-doc-subtitle" style="font-weight: 950; color: #111; letter-spacing: 0.2px;">${copyTitle}</span>
+                  </div>
+                </div>
+
+                <div class="bon-tracking-section">
+                  <div class="bon-tracking-info">
+                    <span class="bon-tracking-label">TICKET DOSSIER :</span>
+                    <span class="bon-tracking-number">N° ${editingTicket.id}</span>
+                  </div>
+                </div>
+
+                <div class="bon-parties-section">
+                  <div class="bon-column">
+                    <span class="bon-column-title">EXPÉDITEUR (Boutique)</span>
+                    <div style="display: flex; gap: 2rem; align-items: center;">
+                      ${shopSavedLogo ? `<img src="${shopSavedLogo}" style="width: 10.5mm; height: 10.5mm; border-radius: 50%; object-fit: cover; border: 1px solid black; flex-shrink: 0;" />` : ''}
+                      <div>
+                        <div class="bon-column-bold" style="font-size: 10px;">${shopSavedName}</div>
+                        <div style="font-size: 8.5px; line-height: 1.1; margin-bottom: 0.3mm;">${shopSavedAddress}</div>
+                        <div class="bon-column-bold" style="font-family: monospace; font-size: 9.5px; line-height: 1;">Tél: ${shopSavedPhone}</div>
+                        <div style="font-size: 8.5px; color: #111; line-height: 1;">E-mail: ${shopSavedEmail}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bon-column">
+                    <span class="bon-column-title">DESTINATAIRE (Client)</span>
+                    <div class="bon-column-bold">Nom: ${editingTicket.nomClient}</div>
+                    <div style="font-size: 9.5px;">Appareil: <span class="bon-column-bold" style="text-transform: uppercase;">${editingTicket.modele || 'Non renseigné'}</span></div>
+                    <div class="bon-column-bold" style="font-family: monospace; font-size: 9.5px;">Tél: ${editingTicket.telephoneClient || 'Non fourni'}</div>
+                    <div style="font-size: 9.5px;">Statut: <span style="text-decoration: underline; font-weight: bold; text-transform: uppercase;">${editingTicket.statut}</span></div>
+                  </div>
+                </div>
+
+                <div class="bon-date-box">
+                  <span class="bon-date-box-label">DATE PRISE EN CHARGE :</span>
+                  <span class="bon-date-box-value">${formattedDate}</span>
+                </div>
+
+                <div class="bon-table-section">
+                  <div class="bon-table-desc-col">
+                    <span class="bon-table-col-title">DESCRIPTION DE LA PANNE</span>
+                    <div class="bon-table-desc-text">${editingTicket.descriptionProbleme || "Aucune description de panne."}</div>
+                  </div>
+
+                  <div class="bon-table-price-col">
+                    <span class="bon-table-col-title" style="margin: 0; font-family: monospace;">MONTANT TOTAL :</span>
+                    <div class="bon-price-wrapper">
+                      <span class="bon-table-price-value">${formattedPrice}</span>
+                      <span class="bon-table-price-sublabel">Net à payer (DZD)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bon-footer-section">
+                  <div class="bon-footer-rules">
+                    * CONDITIONS : APPAREILS REPRIS SOUS 30 JOURS. APRÈS RETRAIT IMPOSSIBLE SANS CE BON. REÇU CONSERVÉ PAR LE DÉPOSITAIRE.
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="bon-header-right">
-              <h4 class="bon-doc-title">${docTitle}</h4>
-              <span class="bon-doc-subtitle">Document officiel d'intervention</span>
-            </div>
-          </div>
+            `;
+            return `
+              ${renderSingleBon('COURRIER / EXEMPLAIRE CLIENT')}
+              <div style="border-left: 1.5px dashed #444; height: 138mm; margin-top: 5mm; margin-left: 4.5mm; margin-right: 0.5mm; display: block; flex-shrink: 0;" class="print-cut-line"></div>
+              ${renderSingleBon('CONSERVÉ / EXEMPLAIRE ATELIER')}
+            `;
+          })()}
+        </div>
+      `;
+
+      // Old layout bypassed
+      const bypassOldLayout = "";
+      const disabledRemainingLines = `
 
           <div class="bon-tracking-section">
             <div class="bon-tracking-info">
@@ -622,9 +695,8 @@ export default function RepairForm({ isDarkMode, editingTicket, onSave, onCancel
           font-family: monospace;
         }
         .bon-table-desc-text {
-          font-size: 11px;
+          font-size: 13.5px;
           font-weight: 855;
-          font-style: italic;
           line-height: 1.35;
         }
         .bon-table-price-col {

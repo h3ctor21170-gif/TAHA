@@ -59,32 +59,32 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
     .slice(0, 3);
 
   return (
-    <div className="p-8 space-y-8" id="dashboard-view">
+    <div className="p-6 md:p-8 space-y-6 md:space-y-8 font-sans" id="dashboard-view">
       {/* 4 KPI Counter Cards Container */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-container">
         {/* KPI 1: Total des tickets */}
         <motion.div
           id="kpi-card-total-tickets"
           whileHover={{ y: -4, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className={`p-5 rounded-xl border flex items-center justify-between shadow-lg transition-all ${
+          transition={{ type: "spring", stiffness: 350, damping: 25 }}
+          className={`p-6 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
             isDarkMode 
-              ? 'bg-[#1e293b] border-[#334155] shadow-slate-950/40 text-white' 
-              : 'bg-white border-slate-150 shadow-slate-200/50 text-slate-800'
+              ? 'bg-slate-900/40 border-slate-900/90 shadow-2xl shadow-slate-950/40 text-slate-100 hover:border-sky-500/20 hover:shadow-glow-blue' 
+              : 'bg-white border-slate-200/60 shadow-md shadow-slate-100/50 text-slate-800 hover:border-sky-500/35 hover:shadow-sky-500/5'
           }`}
         >
-          <div className="space-y-1">
-            <p className={`text-xs uppercase tracking-wider font-bold ${isDarkMode ? 'text-[#94a3b8]' : 'text-slate-500'}`}>
-              Total des tickets
+          <div className="space-y-2">
+            <p className={`text-[10px] uppercase tracking-widest font-extrabold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Volume de charge
             </p>
-            <h3 className={`text-2xl font-extrabold tracking-tight ${isDarkMode ? 'text-[#f8fafc]' : ''}`} id="kpi-val-total-tickets">
+            <h3 className="text-3xl font-black font-display tracking-tight leading-none" id="kpi-val-total-tickets">
               {totalTickets}
             </h3>
-            <p className="text-[10px] text-[#38bdf8] font-bold">
-              Active et Historique
+            <p className="text-[10px] text-sky-450 dark:text-sky-400 font-bold uppercase tracking-wider">
+              Tickets Actifs & Historique
             </p>
           </div>
-          <div className="p-3 bg-[#38bdf8]/10 rounded-lg text-[#38bdf8]" id="kpi-icon-total-tickets">
+          <div className="p-3 bg-sky-500/10 dark:bg-sky-500/5 rounded-xl text-sky-550 dark:text-sky-400 border border-sky-500/10" id="kpi-icon-total-tickets">
             <Ticket className="w-5 h-5" />
           </div>
         </motion.div>
@@ -93,25 +93,25 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
         <motion.div
           id="kpi-card-revenue"
           whileHover={{ y: -4, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className={`p-5 rounded-xl border flex items-center justify-between shadow-lg transition-all ${
+          transition={{ type: "spring", stiffness: 350, damping: 25 }}
+          className={`p-6 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
             isDarkMode 
-              ? 'bg-[#1e293b] border-[#334155] shadow-slate-950/40 text-white' 
-              : 'bg-white border-slate-150 shadow-slate-200/50 text-slate-800'
+              ? 'bg-slate-900/40 border-slate-900/90 shadow-2xl shadow-slate-950/40 text-slate-100 hover:border-amber-500/20 hover:shadow-glow-amber' 
+              : 'bg-white border-slate-200/60 shadow-md shadow-slate-100/50 text-slate-800 hover:border-amber-500/35 hover:shadow-amber-500/5'
           }`}
         >
-          <div className="space-y-1">
-            <p className={`text-xs uppercase tracking-wider font-bold ${isDarkMode ? 'text-[#94a3b8]' : 'text-slate-500'}`}>
-              Somme des prix facturés
+          <div className="space-y-2">
+            <p className={`text-[10px] uppercase tracking-widest font-extrabold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Prix global facturé
             </p>
-            <h3 className="text-2xl font-extrabold tracking-tight text-[#f8fafc] font-mono" id="kpi-val-revenue">
-              {totalRevenue > 0 ? formatDZD(totalRevenue).replace("DZD", "").trim() : "0"}<span className="text-xs text-slate-500 ml-1 font-sans">DZD</span>
+            <h3 className="text-2.5xl font-black font-mono tracking-tight leading-none text-amber-500 dark:text-amber-450" id="kpi-val-revenue">
+              {totalRevenue > 0 ? formatDZD(totalRevenue).replace("DZD", "").trim() : "0"}<span className="text-[10px] text-slate-500 ml-1 font-sans font-bold">DZD</span>
             </h3>
-            <p className="text-[10px] text-emerald-400 font-bold">
-              Chiffre d'affaires brut
+            <p className="text-[10px] text-emerald-500 dark:text-emerald-400 font-bold uppercase tracking-wider">
+              Total Chiffre d'affaires
             </p>
           </div>
-          <div className="p-3 bg-emerald-500/10 rounded-lg text-emerald-400" id="kpi-icon-revenue">
+          <div className="p-3 bg-amber-500/10 dark:bg-amber-500/5 rounded-xl text-amber-550 dark:text-amber-450 border border-amber-500/10" id="kpi-icon-revenue">
             <DollarSign className="w-5 h-5" />
           </div>
         </motion.div>
@@ -120,25 +120,25 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
         <motion.div
           id="kpi-card-parts-cost"
           whileHover={{ y: -4, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className={`p-5 rounded-xl border flex items-center justify-between shadow-lg transition-all ${
+          transition={{ type: "spring", stiffness: 350, damping: 25 }}
+          className={`p-6 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
             isDarkMode 
-              ? 'bg-[#1e293b] border-[#334155] shadow-slate-950/40 text-white' 
-              : 'bg-white border-slate-150 shadow-slate-200/50 text-slate-800'
+              ? 'bg-slate-900/40 border-slate-900/90 shadow-2xl shadow-slate-950/40 text-slate-100 hover:border-purple-500/20 hover:shadow-glow-purple' 
+              : 'bg-white border-slate-200/60 shadow-md shadow-slate-100/50 text-slate-800 hover:border-purple-500/35 hover:shadow-purple-500/5'
           }`}
         >
-          <div className="space-y-1">
-            <p className={`text-xs uppercase tracking-wider font-bold ${isDarkMode ? 'text-[#94a3b8]' : 'text-slate-500'}`}>
-              Pièces d'origine investies
+          <div className="space-y-2">
+            <p className={`text-[10px] uppercase tracking-widest font-extrabold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Pièces investies
             </p>
-            <h3 className="text-2xl font-extrabold tracking-tight text-[#f8fafc] font-mono" id="kpi-val-parts-cost">
-              {totalCost > 0 ? formatDZD(totalCost).replace("DZD", "").trim() : "0"}<span className="text-xs text-slate-500 ml-1 font-sans">DZD</span>
+            <h3 className="text-2.5xl font-black font-mono tracking-tight leading-none text-purple-500 dark:text-purple-400" id="kpi-val-parts-cost">
+              {totalCost > 0 ? formatDZD(totalCost).replace("DZD", "").trim() : "0"}<span className="text-[10px] text-slate-500 ml-1 font-sans font-bold">DZD</span>
             </h3>
-            <p className="text-[10px] text-amber-500 font-bold">
-              Coût total du stock utilisé
+            <p className="text-[10px] text-purple-600 dark:text-purple-300 font-bold uppercase tracking-wider">
+              Coût total du stock
             </p>
           </div>
-          <div className="p-3 bg-amber-500/10 rounded-lg text-amber-400" id="kpi-icon-parts-cost">
+          <div className="p-3 bg-purple-500/10 dark:bg-purple-500/5 rounded-xl text-purple-550 dark:text-purple-400 border border-purple-500/10" id="kpi-icon-parts-cost">
             <Cpu className="w-5 h-5" />
           </div>
         </motion.div>
@@ -147,25 +147,25 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
         <motion.div
           id="kpi-card-profit"
           whileHover={{ y: -4, scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className={`p-5 rounded-xl border flex items-center justify-between shadow-lg transition-all ${
+          transition={{ type: "spring", stiffness: 350, damping: 25 }}
+          className={`p-6 rounded-2xl border flex items-center justify-between transition-all duration-300 ${
             isDarkMode 
-              ? 'bg-[#1e293b] border-[#334155] shadow-slate-950/40 text-white' 
-              : 'bg-white border-slate-150 shadow-slate-200/50 text-slate-800'
+              ? 'bg-slate-900/40 border-slate-900/90 shadow-2xl shadow-slate-950/40 text-slate-100 hover:border-emerald-500/20 hover:shadow-glow-emerald' 
+              : 'bg-white border-slate-200/60 shadow-md shadow-slate-100/50 text-slate-800 hover:border-emerald-500/35 hover:shadow-emerald-500/5'
           }`}
         >
-          <div className="space-y-1">
-            <p className={`text-xs uppercase tracking-wider font-bold ${isDarkMode ? 'text-[#94a3b8]' : 'text-slate-500'}`}>
-              Marge brute
+          <div className="space-y-2">
+            <p className={`text-[10px] uppercase tracking-widest font-extrabold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Bénéfice Réel Net
             </p>
-            <h3 className="text-2xl font-extrabold tracking-tight text-emerald-400 font-mono" id="kpi-val-profit">
-              {grossProfit > 0 ? '+' : ''}{formatDZD(grossProfit).replace("DZD", "").trim()}<span className="text-xs text-slate-500 ml-1 font-sans">DZD</span>
+            <h3 className="text-2.5xl font-black font-mono tracking-tight leading-none text-emerald-500 dark:text-emerald-400" id="kpi-val-profit">
+              {grossProfit > 0 ? '+' : ''}{formatDZD(grossProfit).replace("DZD", "").trim()}<span className="text-[10px] text-slate-500 ml-1 font-sans font-bold">DZD</span>
             </h3>
-            <p className="text-[10px] text-[#38bdf8] font-bold">
-              + {marginPercentage}% de rentabilité brut
+            <p className="text-[10px] text-sky-450 dark:text-sky-400 font-bold uppercase tracking-wider">
+              {marginPercentage}% de rentabilité
             </p>
           </div>
-          <div className="p-3 bg-emerald-500/10 rounded-lg text-emerald-400" id="kpi-icon-profit">
+          <div className="p-3 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-xl text-emerald-550 dark:text-emerald-400 border border-emerald-500/10" id="kpi-icon-profit">
             <TrendingUp className="w-5 h-5" />
           </div>
         </motion.div>
@@ -177,79 +177,79 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
         {/* Real-time Status Breakdown Section */}
         <div 
           id="section-breakdown" 
-          className={`p-6 rounded-2xl border lg:col-span-2 shadow-lg transition-all ${
-            isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-slate-200'
+          className={`p-6 rounded-2xl border shadow-xl transition-all duration-300 lg:col-span-2 ${
+            isDarkMode ? 'bg-slate-900/40 border-slate-900/90' : 'bg-white border-slate-200/60'
           }`}
         >
-          <div className="flex items-center justify-between pb-5 border-b border-dashed border-slate-200 dark:border-slate-800" id="section-breakdown-header">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-dashed border-slate-200 dark:border-slate-850 gap-2" id="section-breakdown-header">
             <div>
-              <h4 className={`text-base font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-                Répartition par Statut
+              <h4 className={`text-base font-bold font-display tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+                Statut de Production
               </h4>
-              <p className="text-xs text-slate-400 mt-0.5">Pourcentage et volume physique des tickets en cours d'atelier</p>
+              <p className="text-xs text-slate-400 mt-0.5">Analytique physique des téléphones en atelier</p>
             </div>
-            <span className="text-xs font-semibold text-[#38bdf8] px-2.5 py-1 bg-[#38bdf8]/10 rounded-full">
-              {totalTickets} Tickets au total
+            <span className="text-xs font-bold text-sky-450 bg-sky-500/5 dark:bg-sky-500/10 px-3.5 py-1.5 rounded-full border border-sky-500/10 uppercase tracking-wide">
+              {totalTickets} Dossiers Enregistrés
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-8" id="status-card-grid">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 py-6" id="status-card-grid">
             {/* Status: En attente */}
-            <div className={`p-4 rounded-xl border ${isDarkMode ? 'bg-[#0f172a] border-[#334155]' : 'bg-slate-50 border-slate-100'}`} id="status-card-attente">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#713f12] text-[#fde047]">Diagnostic</span>
-                <span className={`text-sm font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-700'}`}>{countAttente}</span>
+            <div className={`p-4.5 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-950/40 border-slate-900/80 hover:border-amber-500/30' : 'bg-slate-50/70 border-slate-200/40 hover:border-amber-500/30'}`} id="status-card-attente">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-550/10">Diagnostic</span>
+                <span className={`text-base font-black font-mono ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{countAttente}</span>
               </div>
-              <p className={`text-xs mt-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>En attente de diagnostic</p>
-              <div className="w-full bg-slate-700/30 h-1.5 rounded-full mt-3 overflow-hidden">
-                <div className="bg-[#fde047] h-full rounded-full transition-all duration-350" style={{ width: `${percentAttente}%` }}></div>
+              <p className={`text-xs mt-3 font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>En attente de diagnostic</p>
+              <div className="w-full bg-slate-700/20 dark:bg-slate-800/50 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div className="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-500" style={{ width: `${percentAttente}%` }}></div>
               </div>
-              <span className="text-[10px] text-slate-400 mt-1 block font-semibold">{percentAttente}% du volume</span>
+              <span className="text-[10px] text-slate-400 mt-2 block font-semibold">{percentAttente}% de la charge client</span>
             </div>
 
             {/* Status: En réparation */}
-            <div className={`p-4 rounded-xl border ${isDarkMode ? 'bg-[#0f172a] border-[#334155]' : 'bg-slate-50 border-slate-100'}`} id="status-card-reparation">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#581c87] text-[#d8b4fe]">En réparation</span>
-                <span className={`text-sm font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-700'}`}>{countReparation}</span>
+            <div className={`p-4.5 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-950/40 border-slate-900/80 hover:border-purple-500/30' : 'bg-slate-50/70 border-slate-200/40 hover:border-purple-500/30'}`} id="status-card-reparation">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-400 border border-purple-550/10">En cours</span>
+                <span className={`text-base font-black font-mono ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{countReparation}</span>
               </div>
-              <p className={`text-xs mt-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>En cours de travail</p>
-              <div className="w-full bg-slate-700/30 h-1.5 rounded-full mt-3 overflow-hidden">
-                <div className="bg-[#d8b4fe] h-full rounded-full transition-all duration-350" style={{ width: `${percentReparation}%` }}></div>
+              <p className={`text-xs mt-3 font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>En cours de travail</p>
+              <div className="w-full bg-slate-700/20 dark:bg-slate-800/50 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-full rounded-full transition-all duration-500" style={{ width: `${percentReparation}%` }}></div>
               </div>
-              <span className="text-[10px] text-slate-400 mt-1 block font-semibold">{percentReparation}% du volume</span>
+              <span className="text-[10px] text-slate-400 mt-2 block font-semibold">{percentReparation}% de la charge client</span>
             </div>
 
             {/* Status: Réparation terminée */}
-            <div className={`p-4 rounded-xl border ${isDarkMode ? 'bg-[#0f172a] border-[#334155]' : 'bg-slate-50 border-slate-100'}`} id="status-card-terminee">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-[#064e3b] text-[#6ee7b7]">Terminée</span>
-                <span className={`text-sm font-extrabold ${isDarkMode ? 'text-white' : 'text-slate-700'}`}>{countTerminee}</span>
+            <div className={`p-4.5 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-950/40 border-slate-900/80 hover:border-emerald-500/30' : 'bg-slate-50/70 border-slate-200/40 hover:border-emerald-500/30'}`} id="status-card-terminee">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-550/10">Terminée</span>
+                <span className={`text-base font-black font-mono ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{countTerminee}</span>
               </div>
-              <p className={`text-xs mt-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Prêt à être récupéré</p>
-              <div className="w-full bg-slate-700/30 h-1.5 rounded-full mt-3 overflow-hidden">
-                <div className="bg-[#6ee7b7] h-full rounded-full transition-all duration-350" style={{ width: `${percentTerminee}%` }}></div>
+              <p className={`text-xs mt-3 font-semibold ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Prêt à être récupéré</p>
+              <div className="w-full bg-slate-700/20 dark:bg-slate-800/50 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div className="bg-gradient-to-r from-emerald-500 to-emerald-400 h-full rounded-full transition-all duration-500" style={{ width: `${percentTerminee}%` }}></div>
               </div>
-              <span className="text-[10px] text-slate-400 mt-1 block font-semibold">{percentTerminee}% du volume</span>
+              <span className="text-[10px] text-slate-400 mt-2 block font-semibold">{percentTerminee}% de la charge client</span>
             </div>
           </div>
 
           {/* Quick Graph of brand breakdown */}
-          <div className="mt-2 space-y-4" id="brand-breakdown-sub">
-            <h5 className={`text-xs font-bold tracking-wider uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-              Marques de téléphones en atelier
+          <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-slate-850 space-y-4" id="brand-breakdown-sub">
+            <h5 className={`text-[10px] font-black tracking-widest uppercase ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              Marques phares en cours d'intervention
             </h5>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4" id="brand-bars">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5" id="brand-bars">
               {formattedBrands.length > 0 ? (
                 formattedBrands.map((brand, idx) => (
-                  <div key={idx} className="flex flex-col space-y-1.5" id={`brand-bar-${idx}`}>
-                    <div className="flex justify-between text-xs" id={`brand-lbl-${idx}`}>
-                      <span className={`font-semibold ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{brand.name}</span>
-                      <span className="text-slate-400 font-semibold">{brand.count} {brand.count > 1 ? 'appareils' : 'appareil'} ({brand.percentage}%)</span>
+                  <div key={idx} className="flex flex-col space-y-2 bg-slate-950/20 dark:bg-slate-900/20 p-3 rounded-xl border border-slate-200/10" id={`brand-bar-${idx}`}>
+                    <div className="flex justify-between text-xs font-bold leading-none" id={`brand-lbl-${idx}`}>
+                      <span className={isDarkMode ? 'text-slate-200' : 'text-slate-705'}>{brand.name}</span>
+                      <span className="text-slate-400">{brand.count} {brand.count > 1 ? 'mobiles' : 'mobile'} ({brand.percentage}%)</span>
                     </div>
-                    <div className="w-full bg-slate-700/20 h-2 rounded-full overflow-hidden">
+                    <div className="w-full bg-slate-700/15 dark:bg-slate-850 h-2 rounded-full overflow-hidden">
                       <div 
-                        className="bg-[#38bdf8] h-full rounded-full transition-all duration-500" 
+                        className="bg-gradient-to-r from-sky-500 to-sky-400 h-full rounded-full transition-all duration-500" 
                         style={{ width: `${brand.percentage}%` }}
                       ></div>
                     </div>
@@ -267,59 +267,59 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
         {/* Recent timeline sidebar inside statistics (right-hand column) */}
         <div 
           id="section-timeline" 
-          className={`p-6 rounded-2xl border shadow-lg flex flex-col justify-between transition-all ${
-            isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-slate-200'
+          className={`p-6 rounded-2xl border shadow-xl flex flex-col justify-between transition-all duration-300 ${
+            isDarkMode ? 'bg-slate-900/40 border-slate-900/90' : 'bg-white border-slate-200/60'
           }`}
         >
           <div className="space-y-4" id="timeline-top">
-            <h4 id="recent-tickets-title" className={`text-base font-bold ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
-              Dernières entrées
+            <h4 id="recent-tickets-title" className={`text-base font-bold font-display tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+              Derniers Enregistrements
             </h4>
             
-            <div className="space-y-4 pt-2" id="timeline-list">
+            <div className="space-y-3.5 pt-1" id="timeline-list">
               {recentRepairs.length > 0 ? (
                 recentRepairs.map((ticket) => (
                   <div 
                     key={ticket.id} 
                     id={`timeline-item-${ticket.id}`}
                     onClick={() => onNavigateToTab('liste')}
-                    className={`flex items-start space-x-3 p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                    className={`flex items-start space-x-3 p-3.5 rounded-xl border text-left cursor-pointer transition-all duration-300 ${
                       isDarkMode 
-                        ? 'bg-[#0f172a] border-[#334155] hover:bg-slate-800' 
-                        : 'bg-slate-50 border-slate-100 hover:bg-slate-100 hover:border-slate-200'
+                        ? 'bg-slate-950/30 border-slate-900/70 hover:bg-slate-900/70 hover:border-sky-500/20' 
+                        : 'bg-slate-50/50 border-slate-100 hover:bg-slate-100/50 hover:border-slate-250'
                     }`}
                   >
-                    <div className="p-2 bg-[#38bdf8]/10 rounded-lg text-[#38bdf8] mt-1" id={`timeline-avatar-${ticket.id}`}>
-                      <Smartphone className="w-4 h-4" />
+                    <div className="p-2 bg-sky-500/10 dark:bg-sky-500/5 rounded-xl text-sky-550 dark:text-sky-400 mt-0.5 shrink-0" id={`timeline-avatar-${ticket.id}`}>
+                      <Smartphone className="w-3.5 h-3.5" />
                     </div>
-                    <div className="flex-1 min-w-0" id={`timeline-info-${ticket.id}`}>
+                    <div className="flex-1 min-w-0 font-sans" id={`timeline-info-${ticket.id}`}>
                       <div className="flex items-center justify-between" id={`timeline-meta-${ticket.id}`}>
-                        <h5 className={`text-xs font-bold truncate ${isDarkMode ? 'text-slate-205' : 'text-slate-800'}`}>
+                        <h5 className={`text-xs font-extrabold truncate ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>
                           {ticket.nomClient}
                         </h5>
-                        <span className="text-[10px] text-[#38bdf8] font-bold font-mono bg-[#38bdf8]/10 px-1 py-0.5 rounded">
+                        <span className="text-[9px] text-sky-450 dark:text-sky-400 font-black font-mono bg-sky-500/10 dark:bg-sky-550/15 px-1.5 py-0.5 rounded border border-sky-500/10 whitespace-nowrap">
                           {ticket.id}
                         </span>
                       </div>
-                      <p className={`text-[11px] truncate ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                      <p className={`text-[11px] font-semibold truncate mt-0.5 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
                         {ticket.modele}
                       </p>
-                      <p className="text-[10px] text-slate-550 truncate italic mt-1" id={`timeline-problem-${ticket.id}`}>
+                      <p className={`text-[10px] truncate italic mt-1 ${isDarkMode ? 'text-slate-500' : 'text-slate-500'}`} id={`timeline-problem-${ticket.id}`}>
                         {ticket.descriptionProbleme}
                       </p>
                       
                       {/* Date details and badge */}
-                      <div className="flex items-center justify-between mt-2 pt-1 border-t border-dashed border-[#334155]/50">
-                        <span className="text-[9px] text-slate-400">
+                      <div className="flex items-center justify-between mt-3 pt-2 border-t border-dashed border-slate-200/60 dark:border-slate-900/60">
+                        <span className="text-[9px] font-bold text-slate-400">
                           {new Date(ticket.dateEntree).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })}
                         </span>
                         
-                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${
+                        <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-lg ${
                           ticket.statut === 'Réparation terminée' 
-                            ? 'text-[#6ee7b7] bg-[#064e3b]'
+                            ? 'text-emerald-500 bg-emerald-500/10 dark:bg-emerald-550/10'
                             : ticket.statut === 'En réparation'
-                            ? 'text-[#d8b4fe] bg-[#581c87]'
-                            : 'text-[#fde047] bg-[#713f12]'
+                            ? 'text-purple-400 bg-purple-500/10 dark:bg-purple-550/10'
+                            : 'text-amber-500 bg-amber-550/10 dark:bg-amber-550/10'
                         }`} id={`timeline-badge-${ticket.id}`}>
                           {ticket.statut === 'Réparation terminée' ? 'Terminée' : ticket.statut === 'En réparation' ? 'En cours' : 'Diagnostic'}
                         </span>
@@ -335,13 +335,13 @@ export default function Dashboard({ tickets, isDarkMode, onNavigateToTab }: Dash
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-200 dark:border-[#334155] mt-4" id="timeline-bottom">
+          <div className="pt-4 border-t border-slate-200 dark:border-slate-900 mt-4" id="timeline-bottom">
             <button
               id="btn-all-repairs-nav"
               onClick={() => onNavigateToTab('liste')}
-              className="w-full py-2.5 text-xs font-bold text-center bg-[#0284c7] hover:bg-[#0284c7]/95 active:bg-[#0284c7]/90 text-white rounded-lg transition-all duration-200"
+              className="w-full py-2.5 text-xs font-black uppercase tracking-widest text-center bg-sky-600 hover:bg-sky-555 active:bg-sky-700 text-white rounded-xl shadow-md cursor-pointer shadow-sky-600/10 transition-transform hover:-translate-y-0.5 active:translate-y-0 duration-200"
             >
-              Consulter tout le registre
+              Consulter tout le Registre
             </button>
           </div>
         </div>

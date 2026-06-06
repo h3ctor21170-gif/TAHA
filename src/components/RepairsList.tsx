@@ -144,19 +144,19 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
       {/* Filter Utility Card bar */}
       <div 
         id="filters-bar-card"
-        className={`p-6 rounded-2xl border shadow-md space-y-4 transition-all ${
-          isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-slate-200'
+        className={`p-6 rounded-2xl border shadow-xl space-y-5 transition-all duration-300 ${
+          isDarkMode ? 'bg-slate-900/40 border-slate-900/90' : 'bg-white border-slate-200/60'
         }`}
       >
-        <div className="flex items-center space-x-2 text-[#38bdf8]" id="filter-header-sub">
+        <div className="flex items-center space-x-2 text-sky-450 dark:text-sky-400" id="filter-header-sub">
           <Filter className="w-4 h-4" />
-          <span className="text-xs font-bold uppercase tracking-wider">Critères de recherche</span>
+          <span className="text-[11px] font-black uppercase tracking-widest font-display">Critères de recherche client</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="filter-inputs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5" id="filter-inputs">
           {/* Nom du client */}
-          <div className="space-y-1" id="field-filter-client">
-            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="inp-filter-name">
+          <div className="space-y-1.5" id="field-filter-client">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest" htmlFor="inp-filter-name">
               Nom du client
             </label>
             <input
@@ -165,17 +165,17 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
               placeholder="Ex: Amine Merah..."
               value={filterClientName}
               onChange={(e) => setFilterClientName(e.target.value)}
-              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+              className={`w-full text-xs px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-1 transition-all ${
                 isDarkMode 
-                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
-                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600 focus:border-blue-600'
+                  ? 'bg-slate-950/40 border-slate-900 text-slate-200 focus:ring-sky-500 focus:border-sky-500' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-sky-655 focus:border-sky-655'
               }`}
             />
           </div>
 
           {/* Téléphone */}
-          <div className="space-y-1" id="field-filter-phone">
-            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="inp-filter-phone">
+          <div className="space-y-1.5" id="field-filter-phone">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest" htmlFor="inp-filter-phone">
               Numéro de téléphone
             </label>
             <input
@@ -184,17 +184,17 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
               placeholder="Ex: 0550..."
               value={filterPhone}
               onChange={(e) => setFilterPhone(e.target.value)}
-              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+              className={`w-full text-xs px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-1 transition-all font-mono ${
                 isDarkMode 
-                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
-                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600 focus:border-blue-600'
+                  ? 'bg-slate-950/40 border-slate-900 text-slate-200 focus:ring-sky-500 focus:border-sky-500' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-sky-655 focus:border-sky-655'
               }`}
             />
           </div>
 
           {/* Mot-clé problème */}
-          <div className="space-y-1" id="field-filter-issue">
-            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="inp-filter-problem">
+          <div className="space-y-1.5" id="field-filter-issue">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest" htmlFor="inp-filter-problem">
               Modèle ou panne
             </label>
             <input
@@ -203,27 +203,27 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
               placeholder="Ex: Écran, Batterie, iPhone..."
               value={filterProblem}
               onChange={(e) => setFilterProblem(e.target.value)}
-              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+              className={`w-full text-xs px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-1 transition-all ${
                 isDarkMode 
-                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
-                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600 focus:border-blue-600'
+                  ? 'bg-slate-950/40 border-slate-900 text-slate-200 focus:ring-sky-500 focus:border-sky-500' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-sky-655 focus:border-sky-655'
               }`}
             />
           </div>
 
           {/* Status filter selection */}
-          <div className="space-y-1" id="field-filter-status">
-            <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest" htmlFor="sel-filter-status">
+          <div className="space-y-1.5" id="field-filter-status">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest" htmlFor="sel-filter-status">
               Statut réparation
             </label>
             <select
               id="sel-filter-status"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className={`w-full text-xs px-3 py-2.5 rounded-lg border focus:outline-none focus:ring-1 transition-all ${
+              className={`w-full text-xs px-3.5 py-2.5 rounded-xl border focus:outline-none focus:ring-1 transition-all ${
                 isDarkMode 
-                  ? 'bg-[#0f172a] border-[#334155] text-slate-200 focus:ring-[#38bdf8] focus:border-[#38bdf8]' 
-                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-blue-600 focus:border-blue-600'
+                  ? 'bg-slate-950/40 border-slate-900 text-slate-200 focus:ring-sky-500 focus:border-sky-500' 
+                  : 'bg-slate-50 border-slate-200 text-slate-800 focus:ring-sky-655 focus:border-sky-655'
               }`}
             >
               <option value="Tous">Tous les statuts</option>
@@ -235,13 +235,15 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
         </div>
 
         {/* Filter triggers */}
-        <div className="flex justify-end space-x-2 pt-2" id="filter-buttons">
+        <div className="flex justify-end space-x-2.5 pt-1" id="filter-buttons">
           <button
             id="btn-reinitialiser"
             type="button"
             onClick={handleResetFilters}
-            className={`flex items-center space-x-1 font-bold text-xs px-3 py-2.5 rounded-lg border transition-all hover:bg-slate-100 dark:hover:bg-[#0f172a] cursor-pointer ${
-              isDarkMode ? 'border-[#334155] text-slate-350' : 'border-slate-200 text-slate-600'
+            className={`flex items-center space-x-2 font-bold text-xs px-4 py-2.5 rounded-xl border transition-all cursor-pointer ${
+              isDarkMode 
+                ? 'border-slate-855 bg-slate-950/30 text-slate-350 hover:bg-slate-900 hover:text-white' 
+                : 'border-slate-200 text-slate-600 hover:bg-slate-100/80 hover:text-slate-900'
             }`}
           >
             <RefreshCcw className="w-3.5 h-3.5" />
@@ -251,7 +253,7 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
             id="btn-filtrer-valider"
             type="button"
             onClick={handleApplyFilters}
-            className="flex items-center space-x-1.5 bg-[#0284c7] hover:bg-[#0284c7]/95 active:bg-[#0284c7]/90 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow cursor-pointer transition-all"
+            className="flex items-center space-x-2 bg-gradient-to-r from-sky-600 to-sky-550 hover:from-sky-550 hover:to-sky-500 active:scale-[0.98] text-white font-extrabold text-xs px-6 py-2.5 rounded-xl shadow-lg hover:shadow-sky-500/10 cursor-pointer transition-transform duration-100"
           >
             <Filter className="w-3.5 h-3.5" />
             <span>Filtrer</span>
@@ -262,52 +264,52 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
       {/* Repairs Master Data Table */}
       <div 
         id="tickets-table-card"
-        className={`border rounded-2xl overflow-hidden shadow-lg transition-all ${
-          isDarkMode ? 'bg-[#1e293b] border-[#334155]' : 'bg-white border-slate-200'
+        className={`border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
+          isDarkMode ? 'bg-slate-900/40 border-slate-900/95' : 'bg-white border-slate-200/60'
         }`}
       >
         <div className="overflow-x-auto" id="table-scroll-container">
           <table className="w-full text-left border-collapse" id="tickets-table">
             <thead>
-              <tr className={`border-b text-[11px] font-bold tracking-wider uppercase transition-colors ${
-                isDarkMode ? 'bg-[#0f172a] border-[#334155] text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-550'
+              <tr className={`border-b text-[10px] font-black tracking-widest uppercase transition-colors ${
+                isDarkMode ? 'bg-slate-950/80 border-slate-900 text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-500'
               }`}>
-                <th className="py-4 px-6 w-16 text-center">N°</th>
-                <th className="py-4 px-5">Date d'entrée</th>
-                <th className="py-4 px-5">Nom du client</th>
-                <th className="py-4 px-5">Modele de téléphone</th>
-                <th className="py-4 px-5">Description panne</th>
-                <th className="py-4 px-5">Prix final</th>
-                <th className="py-4 px-5 text-center">Statut</th>
-                <th className="py-4 px-6 text-center w-28">Actions</th>
+                <th className="py-4.5 px-6 w-18 text-center text-slate-400 font-bold">N°</th>
+                <th className="py-4.5 px-5 text-slate-400 font-bold">Date d'entrée</th>
+                <th className="py-4.5 px-5 text-slate-400 font-bold">Nom du client</th>
+                <th className="py-4.5 px-5 text-slate-400 font-bold">Modèle de téléphone</th>
+                <th className="py-4.5 px-5 text-zinc-400 font-bold">Description panne</th>
+                <th className="py-4.5 px-5 text-zinc-400 font-bold">Prix final</th>
+                <th className="py-4.5 px-5 text-center text-slate-400 font-bold">Statut</th>
+                <th className="py-4.5 px-6 text-center w-28 text-slate-400 font-bold">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/80" id="table-tbody">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-900" id="table-tbody">
               {filteredTickets.length > 0 ? (
                 filteredTickets.map((ticket) => (
                   <tr 
                     key={ticket.id}
                     id={`row-${ticket.id}`}
-                    className={`transition-all ${
+                    className={`transition-all group ${
                       isDarkMode 
-                        ? 'hover:bg-slate-800 text-slate-350 border-b border-[#334155]/40' 
-                        : 'hover:bg-slate-50/80 text-slate-705 border-b border-slate-100'
+                        ? 'hover:bg-slate-900/40 text-slate-350 border-b border-slate-900/40' 
+                        : 'hover:bg-slate-50/60 text-slate-705 border-b border-slate-100'
                     }`}
                   >
                     {/* Ticket ID Format */}
-                    <td id={`cell-id-${ticket.id}`} className="py-4 px-6 text-center text-xs font-bold font-mono text-blue-500 bg-blue-500/5 select-all border-r border-[#334155]/20">
+                    <td id={`cell-id-${ticket.id}`} className="py-4 px-6 text-center text-xs font-black font-mono text-sky-500 bg-sky-500/5 select-all border-r border-[#334155]/10 group-hover:bg-sky-500/10 transition-colors">
                       {ticket.id}
                     </td>
 
                     {/* Entry Date */}
-                    <td id={`cell-date-${ticket.id}`} className="py-4 px-5 text-xs font-medium whitespace-nowrap">
+                    <td id={`cell-date-${ticket.id}`} className="py-4 px-5 text-xs text-slate-400 font-medium whitespace-nowrap">
                       {formatFrenchDateTime(ticket.dateEntree)}
                     </td>
 
                     {/* Client name and telephone */}
-                    <td id={`cell-client-${ticket.id}`} className="py-4 px-5 text-xs font-bold">
+                    <td id={`cell-client-${ticket.id}`} className="py-4 px-5 text-xs font-semibold">
                       <div className="flex flex-col" id={`client-cell-wrap-${ticket.id}`}>
-                        <span className={isDarkMode ? 'text-white' : 'text-slate-900'}>{ticket.nomClient}</span>
+                        <span className={`text-xs font-extrabold ${isDarkMode ? 'text-slate-150' : 'text-slate-805'}`}>{ticket.nomClient}</span>
                         {ticket.telephoneClient && (
                           <span className="text-[10px] text-slate-400 font-mono mt-0.5">{ticket.telephoneClient}</span>
                         )}
@@ -318,19 +320,19 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
                     <td id={`cell-model-${ticket.id}`} className="py-4 px-5 text-xs">
                       <div className="flex items-center space-x-1.5" id={`model-cell-wrap-${ticket.id}`}>
                         <Smartphone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                        <span className="font-semibold">{ticket.modele}</span>
+                        <span className="font-extrabold">{ticket.modele}</span>
                       </div>
                     </td>
 
                     {/* Problem summary */}
                     <td id={`cell-prob-${ticket.id}`} className="py-4 px-5 text-xs max-w-xs truncate">
-                      <span className="italic" title={ticket.descriptionProbleme}>
+                      <span className="italic text-slate-400" title={ticket.descriptionProbleme}>
                         {ticket.descriptionProbleme || "Aucune description fournie"}
                       </span>
                     </td>
 
                     {/* Price in DZD */}
-                    <td id={`cell-price-${ticket.id}`} className="py-4 px-5 text-xs font-extrabold font-mono text-emerald-505 dark:text-emerald-400 select-all">
+                    <td id={`cell-price-${ticket.id}`} className="py-4 px-5 text-xs font-black font-mono text-emerald-500 dark:text-emerald-450 select-all whitespace-nowrap">
                       {formatDZD(ticket.prixFacture)}
                     </td>
 
@@ -339,17 +341,16 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
                       {renderStatusBadge(ticket.statut)}
                     </td>
 
-                    {/* CRUD Actions */}
-                    <td id={`cell-actions-${ticket.id}`} className="py-4 px-6 text-center">
-                      <div className="flex justify-center items-center space-x-1.5" id={`actions-wrap-${ticket.id}`}>
+                               <td id={`cell-actions-${ticket.id}`} className="py-4 px-6 text-center">
+                      <div className="flex justify-center items-center space-x-2" id={`actions-wrap-${ticket.id}`}>
                         {/* Edit Button */}
                         <button
                           id={`btn-edit-${ticket.id}`}
                           onClick={() => onEditTicket(ticket)}
-                          className={`p-2 rounded-lg transition-all hover:scale-110 active:scale-90 ${
+                          className={`p-2 rounded-xl transition-all cursor-pointer hover:scale-105 active:scale-95 ${
                             isDarkMode 
-                              ? 'bg-slate-800 text-blue-400 hover:bg-slate-700 hover:text-blue-300' 
-                              : 'bg-slate-100 text-blue-600 hover:bg-blue-50 hover:text-blue-700'
+                              ? 'bg-slate-900 border border-slate-800 text-sky-450 hover:bg-slate-850 hover:text-sky-300' 
+                              : 'bg-slate-50 border border-slate-200 text-sky-655 hover:bg-slate-100 hover:text-sky-700'
                           }`}
                           title="Modifier ou Mettre à jour"
                         >
@@ -364,10 +365,10 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
                               onDeleteTicket(ticket.id);
                             }
                           }}
-                          className={`p-2 rounded-lg transition-all hover:scale-110 active:scale-90 ${
+                          className={`p-2 rounded-xl transition-all cursor-pointer hover:scale-105 active:scale-95 ${
                             isDarkMode 
-                              ? 'bg-slate-800 text-rose-400 hover:bg-red-500/10 hover:text-rose-300' 
-                              : 'bg-slate-100 text-rose-600 hover:bg-rose-50 hover:text-rose-700'
+                              ? 'bg-slate-900 border border-slate-800 text-rose-450 hover:bg-rose-950/20 hover:text-rose-300 hover:border-rose-900/30' 
+                              : 'bg-slate-50 border border-slate-200 text-rose-600 hover:bg-rose-100/50 hover:text-rose-700'
                           }`}
                           title="Supprimer le ticket"
                         >
@@ -379,16 +380,16 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
                 ))
               ) : (
                 <tr id="table-row-no-records">
-                  <td colSpan={8} className="py-12 px-6 text-center text-sm text-slate-500 font-medium whitespace-normal" id="table-empty-notice">
-                    <div className="flex flex-col items-center justify-center space-y-2" id="empty-subwrap">
-                      <HelpCircle className="w-10 h-10 text-slate-500 mr-1 animate-bounce" />
-                      <p className="font-semibold text-base py-1">Aucun ticket correspondant à vos filtres</p>
+                  <td colSpan={8} className="py-16 px-6 text-center text-sm text-slate-500 font-medium whitespace-normal" id="table-empty-notice">
+                    <div className="flex flex-col items-center justify-center space-y-3" id="empty-subwrap">
+                      <HelpCircle className="w-10 h-10 text-slate-500 mr-1 animate-pulse" />
+                      <p className="font-extrabold text-base py-1 text-slate-400">Aucun ticket de réparation ne correspond à vos filtres</p>
                       <button
                         id="btn-clear-criteria-empty"
                         onClick={handleResetFilters}
-                        className="text-xs text-blue-500 font-bold hover:underline"
+                        className="text-xs bg-sky-500/10 border border-sky-500/20 text-sky-450 dark:text-sky-400 font-black tracking-wide uppercase px-4 py-2 rounded-xl hover:bg-sky-500/15 cursor-pointer transition-all"
                       >
-                        Cliquez ici pour réinitialiser la recherche
+                        Réinitialiser la recherche
                       </button>
                     </div>
                   </td>
@@ -399,14 +400,14 @@ export default function RepairsList({ tickets, isDarkMode, onNavigateToTab, onEd
         </div>
 
         {/* Custom Data Status Footer summary informational banner */}
-        <div id="table-metadata-footer" className={`px-6 py-4 border-t flex flex-col md:flex-row gap-2 justify-between items-center text-xs text-slate-450 font-bold uppercase tracking-wider ${
-          isDarkMode ? 'bg-[#0f172a] border-[#334155]' : 'bg-slate-50'
+        <div id="table-metadata-footer" className={`px-6 py-4.5 border-t flex flex-col md:flex-row gap-4 justify-between items-center text-[10px] text-slate-550 font-black uppercase tracking-widest ${
+          isDarkMode ? 'bg-slate-950/80 border-slate-900 text-slate-400' : 'bg-slate-50 border-slate-200/60 text-slate-500'
         }`}>
-          <span>Monnaie active : Algerie Dinars (DZD)</span>
-          <div className="flex gap-4">
-            <span className="text-[#fde047]">A diagnostic : {tickets.filter(t => t.statut === "En attente de diagnostic").length}</span>
-            <span className="text-[#d8b4fe]">En cours : {tickets.filter(t => t.statut === "En réparation").length}</span>
-            <span className="text-[#6ee7b7]">Terminés : {tickets.filter(t => t.statut === "Réparation terminée").length}</span>
+          <span>Registre Actif : Batna, Algérie (DZD)</span>
+          <div className="flex flex-wrap gap-4" id="footer-status-pills">
+            <span className="text-amber-500 font-bold bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/10">A Diagnostic : {tickets.filter(t => t.statut === "En attente de diagnostic").length}</span>
+            <span className="text-purple-400 font-bold bg-purple-500/10 px-2.5 py-1 rounded-lg border border-purple-500/10">En cours : {tickets.filter(t => t.statut === "En réparation").length}</span>
+            <span className="text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-555/10">Terminés : {tickets.filter(t => t.statut === "Réparation terminée").length}</span>
           </div>
         </div>
       </div>
